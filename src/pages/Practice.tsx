@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Target, CheckCircle, XCircle, Lightbulb } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -13,10 +13,12 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import "katex/dist/katex.min.css";
 import { practice, type Problem, type DetailedStep } from "@/data";
+import { useLearningPlan } from "@/hooks/useLearningPlan";
 
 const Practice = () => {
+  const { plan } = useLearningPlan();
   const [selectedGrade, setSelectedGrade] = useState("9");
-  const [selectedTopic, setSelectedTopic] = useState("9-quadratics");
+  const [selectedTopic, setSelectedTopic] = useState(plan?.topic_id || "9-quadratics");
   const [difficulty, setDifficulty] = useState<"easy" | "medium" | "hard">("medium");
   const [currentProblem, setCurrentProblem] = useState<Problem>(generateProblem("9-quadratics", difficulty));
   const [userAnswer, setUserAnswer] = useState("");
@@ -25,6 +27,14 @@ const Practice = () => {
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [attempts, setAttempts] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
+
+  // Update topic when plan loads
+  useEffect(() => {
+    if (plan?.topic_id && plan.topic_id !== selectedTopic) {
+      setSelectedTopic(plan.topic_id);
+      setCurrentProblem(generateProblem(plan.topic_id, difficulty));
+    }
+  }, [plan?.topic_id]);
 
   function generateProblem(topicId: string, level: string): Problem {
     const practiceSet = practice[topicId] || practice["9-quadratics"];

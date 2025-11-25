@@ -24,12 +24,11 @@ const StepByStep = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [selectedGrade, setSelectedGrade] = useState("9");
-  const [selectedTopic, setSelectedTopic] = useState("9-quadratics");
   const [currentStep, setCurrentStep] = useState(0);
   const [showQuiz, setShowQuiz] = useState(false);
   const [quizQuestions, setQuizQuestions] = useState<any[]>([]);
   const [isGeneratingQuiz, setIsGeneratingQuiz] = useState(false);
-  const { tasks } = useLearningPlan();
+  const { plan, tasks } = useLearningPlan();
   const { markQuizPassed } = useTaskProgress();
 
   useEffect(() => {
@@ -71,7 +70,8 @@ const StepByStep = () => {
     checkProgress();
   }, [tasks, navigate, searchParams]);
 
-  const currentLesson = lessons[selectedTopic] || lessons["9-quadratics"];
+  const topicId = plan?.topic_id || "9-quadratics";
+  const currentLesson = lessons[topicId] || lessons["9-quadratics"];
   const totalSteps = currentLesson.steps.length;
   const isLastStep = currentStep === totalSteps - 1;
 
@@ -185,7 +185,7 @@ const StepByStep = () => {
                           stepContent={currentLesson.steps[currentStep].title}
                           stepExplanation={currentLesson.steps[currentStep].explanation}
                           stepExample={currentLesson.steps[currentStep].example}
-                          topic={selectedTopic}
+                          topic={topicId}
                           gradeLevel={selectedGrade}
                         />
                       </div>
