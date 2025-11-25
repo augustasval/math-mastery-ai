@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { SessionManager } from "@/lib/sessionManager";
 
 interface LearningPlan {
   id: string;
@@ -30,28 +31,52 @@ export const useLearningPlan = () => {
   const fetchPlan = async () => {
     setLoading(true);
     try {
-      const sessionId = localStorage.getItem('mathTutorSessionId');
+      console.log('Current URL:', window.location.href);
+      console.log('localStorage available:', typeof Storage !== 'undefined');
+      
+      const sessionId = SessionManager.getSession();
       if (!sessionId) {
+        console.log('No session ID found in any storage location');
         setLoading(false);
         return;
       }
 
-      // Fetch the learning plan
-      const { data: planData, error: planError } = await supabase
-        .from('learning_plans')
-        .select('*')
-        .eq('session_id', sessionId)
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .maybeSingle();
+      console.log('Fetching plan for session:', sessionId.substring(0, 8) + '...');
 
-      if (planError) throw planError;
+      // Fetch the learning plan with retry logic for robustness
+      let planData = null;
+      let attempts = 0;
+      const maxAttempts = 3;
+
+      while (attempts < maxAttempts && !planData) {
+        try {
+          const { data, error } = await supabase
+            .from('learning_plans')
+            .select('*')
+            .eq('session_id', sessionId)
+            .order('created_at', { ascending: false })
+            .limit(1)
+            .maybeSingle();
+
+          if (error) throw error;
+          planData = data;
+          break;
+        } catch (error) {
+          attempts++;
+          console.warn(`Plan fetch attempt ${attempts} failed:`, error);
+          if (attempts < maxAttempts) {
+            await new Promise(resolve => setTimeout(resolve, 1000));
+          }
+        }
+      }
 
       if (!planData) {
+        console.log('No plan found for session');
         setLoading(false);
         return;
       }
 
+      console.log('Plan found:', planData.id);
       setPlan(planData);
 
       // Fetch tasks for this plan
@@ -63,9 +88,12 @@ export const useLearningPlan = () => {
 
       if (tasksError) throw tasksError;
 
+      console.log(`Found ${tasksData?.length || 0} tasks for plan`);
       setTasks((tasksData || []) as LearningTask[]);
     } catch (error) {
       console.error('Error fetching learning plan:', error);
+      setPlan(null);
+      setTasks([]);
     } finally {
       setLoading(false);
     }

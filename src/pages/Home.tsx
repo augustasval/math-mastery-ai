@@ -12,7 +12,7 @@ import { format, differenceInDays, parseISO, isToday, isPast } from "date-fns";
 
 const Home = () => {
   const navigate = useNavigate();
-  const { plan, tasks, loading, markTaskComplete } = useLearningPlan();
+  const { plan, tasks, loading, markTaskComplete, refetch } = useLearningPlan();
   const [showOnboarding, setShowOnboarding] = useState(false);
 
   useEffect(() => {
@@ -22,18 +22,23 @@ const Home = () => {
     }
   }, [loading, plan]);
 
-  const handleOnboardingComplete = () => {
+  const handleOnboardingComplete = async () => {
     setShowOnboarding(false);
-    window.location.reload(); // Refresh to load new plan
+    // Wait a moment for database consistency, then refetch
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    await refetch();
   };
 
   if (loading) {
+    console.log('Home: Loading state');
     return (
       <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20 flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
+
+  console.log('Home: Render state', { plan: !!plan, showOnboarding, tasksCount: tasks.length });
 
   if (!plan || showOnboarding) {
     return <OnboardingModal open={showOnboarding} onComplete={handleOnboardingComplete} />;
@@ -56,16 +61,18 @@ const Home = () => {
     switch (type) {
       case 'theory': return '📚';
       case 'quiz': return '✍️';
-      case 'practice': return '💪';
+      case 'practice': return '🎯'; // Changed to target to represent focused daily work
       case 'review': return '🔄';
       default: return '📝';
     }
   };
 
   const navigateToTask = (taskType: string) => {
+    // Since all daily tasks now encompass theory + practice + quiz, 
+    // we'll primarily navigate to the practice page which is most comprehensive
     switch (taskType) {
       case 'theory':
-        navigate('/learn');
+        navigate('/practice'); // Practice page has theory components
         break;
       case 'practice':
         navigate('/practice');
@@ -74,7 +81,7 @@ const Home = () => {
         navigate('/mistakes');
         break;
       case 'quiz':
-        navigate('/learn'); // Quiz is part of theory flow
+        navigate('/practice'); // Practice page includes quiz functionality
         break;
     }
   };
@@ -148,34 +155,42 @@ const Home = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-blue-600 dark:text-blue-400">
                   <Calendar className="h-5 w-5" />
-                  Today's Tasks
+                  Today's Learning
                 </CardTitle>
                 <CardDescription>
-                  Focus on these tasks today
+                  {todayTasks.length === 1 
+                    ? "Focus on this topic today" 
+                    : `${todayTasks.length} topics to focus on today`
+                  }
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-3">
-                  {todayTasks.map((task) => (
-                    <div
-                      key={task.id}
-                      className="flex items-center justify-between p-4 rounded-lg bg-background/80 border-2 border-blue-500/30"
-                    >
-                      <div className="flex items-center gap-3 flex-1">
-                        <span className="text-2xl">{getTaskTypeIcon(task.task_type)}</span>
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2">
-                            <p className="font-semibold text-foreground">{task.title}</p>
-                            <Badge variant="outline">{task.task_type}</Badge>
+                <div className="flex items-center justify-between p-4 rounded-lg bg-background/80 border-2 border-blue-500/30">
+                  <div className="flex items-center gap-3 flex-1">
+                    <span className="text-2xl">🎯</span>
+                    <div className="flex-1">
+                      {todayTasks.length === 1 ? (
+                        <>
+                          <p className="font-semibold text-foreground">{todayTasks[0].title}</p>
+                          <p className="text-sm text-muted-foreground">{todayTasks[0].description}</p>
+                        </>
+                      ) : (
+                        <>
+                          <p className="font-semibold text-foreground">Today's Topics</p>
+                          <div className="text-sm text-muted-foreground">
+                            {todayTasks.map((task, index) => (
+                              <div key={task.id} className="mb-1">
+                                <span className="font-medium">• {task.title}</span>
+                              </div>
+                            ))}
                           </div>
-                          <p className="text-sm text-muted-foreground">{task.description}</p>
-                        </div>
-                      </div>
-                      <Button onClick={() => navigateToTask(task.task_type)} size="lg">
-                        Start Now
-                      </Button>
+                        </>
+                      )}
                     </div>
-                  ))}
+                  </div>
+                  <Button onClick={() => navigateToTask('practice')} size="lg">
+                    Start Learning
+                  </Button>
                 </div>
               </CardContent>
             </Card>
@@ -263,10 +278,7 @@ const Home = () => {
                         <Circle className="h-5 w-5 text-muted-foreground flex-shrink-0" />
                         <span className="text-xl">{getTaskTypeIcon(task.task_type)}</span>
                         <div>
-                          <div className="flex items-center gap-2">
-                            <p className="font-medium text-muted-foreground">{task.title}</p>
-                            <Badge variant="secondary">{task.task_type}</Badge>
-                          </div>
+                          <p className="font-medium text-muted-foreground">{task.title}</p>
                           <p className="text-xs text-muted-foreground">
                             {format(parseISO(task.scheduled_date), 'EEEE, MMM d')}
                           </p>
