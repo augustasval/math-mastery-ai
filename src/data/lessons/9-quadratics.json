@@ -1,0 +1,80 @@
+{
+  "topicId": "9-quadratics",
+  "title": "Quadratic Equations",
+  "introduction": "A quadratic equation is a polynomial equation of degree 2. Let's learn how to solve them step by step.",
+  "steps": [
+    {
+      "title": "Understanding the Standard Form",
+      "explanation": "Every quadratic equation can be written as $ax^2 + bx + c = 0$. Here, we identify three important parts: the coefficient of $x^2$ (called $a$), the coefficient of $x$ (called $b$), and the constant term (called $c$). It's crucial that $a$ is not zero, because if it were, we wouldn't have an $x^2$ term and it wouldn't be quadratic anymore.",
+      "example": "In the equation $3x^2 + 7x - 2 = 0$, we identify: $a = 3$, $b = 7$, and $c = -2$",
+      "tip": "Always write the equation in standard form before solving!",
+      "quizQuestion": {
+        "question": "In the quadratic equation $2x^2 - 5x + 3 = 0$, what is the value of the coefficient $b$?",
+        "options": ["2", "-5", "3", "0"],
+        "correctAnswer": 1,
+        "explanation": "The coefficient $b$ is the number in front of $x$. In this equation, it's $-5$."
+      }
+    },
+    {
+      "title": "The Quadratic Formula",
+      "explanation": "The quadratic formula is our main tool for solving these equations. The formula is: $$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$ This formula works for any quadratic equation. The $\\pm$ symbol means we'll get two solutions - one using addition and one using subtraction.",
+      "example": "We'll use this formula with the values $a$, $b$, and $c$ that we identified in step 1.",
+      "quizQuestion": {
+        "question": "What does the $\\pm$ symbol in the quadratic formula mean?",
+        "options": [
+          "We multiply by positive and negative values",
+          "We get two solutions by using both addition and subtraction",
+          "The answer can be positive or negative",
+          "We need to check both possibilities"
+        ],
+        "correctAnswer": 1,
+        "explanation": "The $\\pm$ symbol means we perform the calculation twice: once with addition $(+)$ and once with subtraction $(-)$, giving us two different solutions."
+      }
+    },
+    {
+      "title": "Calculate the Discriminant",
+      "explanation": "Before we solve, we calculate something called the discriminant: $\\Delta = b^2 - 4ac$. This special number tells us important information about our solutions. If the discriminant is positive, we get two different real solutions. If it equals zero, we get exactly one solution. If it's negative, we don't have any real number solutions.",
+      "example": "For $3x^2 + 7x - 2 = 0$: $\\Delta = 7^2 - 4(3)(-2) = 49 + 24 = 73$. Since 73 is positive, we'll have two real solutions.",
+      "tip": "Always check the discriminant first - it saves time!",
+      "quizQuestion": {
+        "question": "If the discriminant $\\Delta = 0$, how many real solutions does the quadratic equation have?",
+        "options": [
+          "No real solutions",
+          "Exactly one solution",
+          "Two different solutions",
+          "Infinitely many solutions"
+        ],
+        "correctAnswer": 1,
+        "explanation": "When the discriminant equals zero, the quadratic equation has exactly one real solution (also called a repeated or double root)."
+      }
+    },
+    {
+      "title": "Apply the Formula",
+      "explanation": "Now we substitute our values into the quadratic formula. We take $b$ and change its sign for the numerator, then add and subtract the square root of our discriminant, and finally divide everything by $2a$. Let's work through this carefully.",
+      "example": "$$x = \\frac{-7 \\pm \\sqrt{73}}{6}$$. This gives us $x_1 = \\frac{-7 + \\sqrt{73}}{6} \\approx 0.26$ and $x_2 = \\frac{-7 - \\sqrt{73}}{6} \\approx -2.59$",
+      "quizQuestion": {
+        "question": "In the quadratic formula, what do we divide by at the end?",
+        "options": ["$a$", "$2a$", "$b$", "$2b$"],
+        "correctAnswer": 1,
+        "explanation": "The entire numerator $-b \\pm \\sqrt{b^2-4ac}$ is divided by $2a$ to get the final solutions."
+      }
+    },
+    {
+      "title": "Verify Your Solutions",
+      "explanation": "The final step is to check our work by substituting our solutions back into the original equation. This confirms we didn't make any calculation errors. Each solution should make the equation equal to zero.",
+      "example": "Let's verify with $x \\approx 0.26$: $3(0.26)^2 + 7(0.26) - 2 \\approx 0$ ✓",
+      "tip": "Always verify! It's the mark of a careful mathematician.",
+      "quizQuestion": {
+        "question": "Why is it important to verify your solutions by substituting them back into the original equation?",
+        "options": [
+          "It's not necessary if you used the formula correctly",
+          "To confirm there were no calculation errors",
+          "To find additional solutions",
+          "To simplify the answer"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Verification helps catch any arithmetic mistakes made during the solving process. Each solution should make the original equation equal to zero."
+      }
+    }
+  ]
+}
