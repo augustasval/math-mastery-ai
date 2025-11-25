@@ -39,7 +39,7 @@ export const TheoryQuiz = ({ questions, onComplete, onReadTheory, onRetry }: The
 
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
-      setSelectedAnswer(userAnswers[currentQuestion + 1]);
+      setSelectedAnswer(newAnswers[currentQuestion + 1]); // Use updated answers
     } else {
       // Quiz complete - show results
       const finalScore = newAnswers.reduce((score, answer, index) => {
