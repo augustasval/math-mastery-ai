@@ -216,9 +216,22 @@ const StepByStep = () => {
   const handleQuizComplete = (score: number) => {
     const percentage = Math.round((score / quizQuestions.length) * 100);
     toast.success(`Quiz complete! You scored ${score}/${quizQuestions.length} (${percentage}%)`);
+  };
+
+  const handleReadTheory = () => {
     setShowQuiz(false);
     setQuizQuestions([]);
-    setCurrentStep(0); // Reset to beginning
+    setCurrentStep(0);
+  };
+
+  const handleRetryQuiz = () => {
+    setShowQuiz(false);
+    // Small delay to allow reset
+    setTimeout(() => {
+      const questions = currentLesson.steps.map(step => step.quizQuestion);
+      setQuizQuestions(questions);
+      setShowQuiz(true);
+    }, 100);
   };
 
   return (
@@ -345,6 +358,8 @@ const StepByStep = () => {
               <TheoryQuiz
                 questions={quizQuestions}
                 onComplete={handleQuizComplete}
+                onReadTheory={handleReadTheory}
+                onRetry={handleRetryQuiz}
               />
             )}
           </Card>

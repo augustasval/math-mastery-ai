@@ -19,9 +19,11 @@ interface QuizQuestion {
 interface TheoryQuizProps {
   questions: QuizQuestion[];
   onComplete: (score: number) => void;
+  onReadTheory: () => void;
+  onRetry: () => void;
 }
 
-export const TheoryQuiz = ({ questions, onComplete }: TheoryQuizProps) => {
+export const TheoryQuiz = ({ questions, onComplete, onReadTheory, onRetry }: TheoryQuizProps) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [userAnswers, setUserAnswers] = useState<(number | null)[]>(Array(questions.length).fill(null));
@@ -125,6 +127,15 @@ export const TheoryQuiz = ({ questions, onComplete }: TheoryQuizProps) => {
                 </Card>
               );
             })}
+          </div>
+
+          <div className="flex gap-3 justify-center mt-6">
+            <Button variant="outline" onClick={onReadTheory} className="flex-1">
+              Read Theory Again
+            </Button>
+            <Button onClick={onRetry} className="flex-1">
+              Retry Quiz
+            </Button>
           </div>
         </CardContent>
       </Card>

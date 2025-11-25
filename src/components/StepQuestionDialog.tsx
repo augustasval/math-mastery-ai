@@ -109,8 +109,18 @@ export const StepQuestionDialog = ({
   const handleQuizComplete = (score: number) => {
     const percentage = Math.round((score / quizQuestions.length) * 100);
     toast.success(`Quiz complete! You scored ${score}/${quizQuestions.length} (${percentage}%)`);
+  };
+
+  const handleReadTheory = () => {
     setShowQuiz(false);
     setQuizQuestions([]);
+  };
+
+  const handleRetryQuiz = () => {
+    setShowQuiz(false);
+    setTimeout(() => {
+      generateQuiz();
+    }, 100);
   };
 
   const generateVisualExample = async () => {
@@ -386,6 +396,8 @@ export const StepQuestionDialog = ({
                 <TheoryQuiz
                   questions={quizQuestions}
                   onComplete={handleQuizComplete}
+                  onReadTheory={handleReadTheory}
+                  onRetry={handleRetryQuiz}
                 />
               </div>
             )}
