@@ -155,7 +155,11 @@ export const TheoryQuiz = ({ questions, onComplete, onReadTheory, onRetry }: The
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="text-lg font-medium">{currentQ.question}</div>
+        <div className="text-lg font-medium prose dark:prose-invert">
+          <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
+            {currentQ.question}
+          </ReactMarkdown>
+        </div>
         
         <RadioGroup
           value={selectedAnswer?.toString()}
