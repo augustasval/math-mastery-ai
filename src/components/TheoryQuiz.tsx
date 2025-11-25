@@ -21,9 +21,10 @@ interface TheoryQuizProps {
   onComplete: (score: number) => void;
   onReadTheory: () => void;
   onRetry: () => void;
+  onStartPractice?: () => void;
 }
 
-export const TheoryQuiz = ({ questions, onComplete, onReadTheory, onRetry }: TheoryQuizProps) => {
+export const TheoryQuiz = ({ questions, onComplete, onReadTheory, onRetry, onStartPractice }: TheoryQuizProps) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [userAnswers, setUserAnswers] = useState<(number | null)[]>(Array(questions.length).fill(null));
@@ -61,6 +62,8 @@ export const TheoryQuiz = ({ questions, onComplete, onReadTheory, onRetry }: The
     const score = userAnswers.reduce((total, answer, index) => {
       return total + (answer === questions[index].correctAnswer ? 1 : 0);
     }, 0);
+    const mistakes = questions.length - score;
+    const showPracticeButton = mistakes <= 2 && onStartPractice;
 
     return (
       <Card className="w-full">
@@ -137,6 +140,14 @@ export const TheoryQuiz = ({ questions, onComplete, onReadTheory, onRetry }: The
               Retry Quiz
             </Button>
           </div>
+          
+          {showPracticeButton && (
+            <div className="mt-4">
+              <Button onClick={onStartPractice} className="w-full" size="lg">
+                Start Practice
+              </Button>
+            </div>
+          )}
         </CardContent>
       </Card>
     );
@@ -162,6 +173,7 @@ export const TheoryQuiz = ({ questions, onComplete, onReadTheory, onRetry }: The
         </div>
         
         <RadioGroup
+          key={currentQuestion}
           value={selectedAnswer?.toString()}
           onValueChange={(value) => setSelectedAnswer(parseInt(value))}
         >
