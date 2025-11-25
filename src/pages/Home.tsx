@@ -13,17 +13,8 @@ import { format, differenceInDays, parseISO, isToday, isPast } from "date-fns";
 const Home = () => {
   const navigate = useNavigate();
   const { plan, tasks, loading, markTaskComplete } = useLearningPlan();
-  const [showOnboarding, setShowOnboarding] = useState(false);
-
-  useEffect(() => {
-    // Show onboarding if no plan exists
-    if (!loading && !plan) {
-      setShowOnboarding(true);
-    }
-  }, [loading, plan]);
 
   const handleOnboardingComplete = () => {
-    setShowOnboarding(false);
     window.location.reload(); // Refresh to load new plan
   };
 
@@ -35,8 +26,12 @@ const Home = () => {
     );
   }
 
-  if (!plan || showOnboarding) {
-    return <OnboardingModal open={showOnboarding} onComplete={handleOnboardingComplete} />;
+  if (!plan) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20">
+        <OnboardingModal open={true} onComplete={handleOnboardingComplete} />
+      </div>
+    );
   }
 
   // Calculate progress
