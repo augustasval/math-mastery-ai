@@ -7,7 +7,7 @@ import { Navigation } from "@/components/Navigation";
 import { OnboardingModal } from "@/components/OnboardingModal";
 import { useLearningPlan } from "@/hooks/useLearningPlan";
 import { useNavigate } from "react-router-dom";
-import { CheckCircle2, Circle, Calendar, BookOpen, Target, Loader2 } from "lucide-react";
+import { CheckCircle2, Circle, Calendar, BookOpen, Target, Loader2, Settings } from "lucide-react";
 import { format, differenceInDays, parseISO, isToday, isPast } from "date-fns";
 
 const Home = () => {
@@ -81,25 +81,29 @@ const Home = () => {
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20">
       <div className="container mx-auto px-4 py-6 max-w-6xl">
         <div className="flex flex-col gap-6">
-          <Navigation />
-
-          {/* Header */}
-          <div className="space-y-2">
-            <h1 className="text-3xl font-bold text-foreground">
-              Learning Plan
-            </h1>
-            <p className="text-muted-foreground">
-              {plan.grade} • {plan.topic_name}
-            </p>
+          {/* Brand Header with Settings */}
+          <div className="flex items-center justify-between">
+            <div className="flex-1" />
+            <h1 className="text-4xl font-bold text-center">CorePus</h1>
+            <div className="flex-1 flex justify-end">
+              <Button 
+                variant="outline" 
+                size="icon"
+                onClick={() => setShowOnboarding(true)}
+                title="Settings"
+              >
+                <Settings className="h-5 w-5" />
+              </Button>
+            </div>
           </div>
 
-          {/* Combined Progress Summary */}
+          {/* Progress Summary */}
           <Card className="p-6 border-primary/20">
             <div className="flex items-start justify-between mb-4">
               <div>
-                <h2 className="text-2xl font-bold">Learning Plan</h2>
+                <h2 className="text-2xl font-bold">{plan.topic_name}</h2>
                 <p className="text-sm text-muted-foreground">
-                  Grade {plan.grade} • {plan.topic_name}
+                  Grade {plan.grade}
                 </p>
               </div>
               <div className="text-right">
