@@ -14,11 +14,15 @@ import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import "katex/dist/katex.min.css";
+import { MathGraph } from "./MathGraph";
 
 interface Message {
   role: "user" | "assistant";
   content: string;
-  image?: string;
+  graphData?: {
+    type: "parabola" | "line" | "points";
+    parameters: any;
+  };
 }
 
 interface StepQuestionDialogProps {
@@ -49,12 +53,12 @@ export const StepQuestionDialog = ({
     if (messages.length > 0) {
       const lastMessage = messages[messages.length - 1];
       if (lastMessage.role === "assistant") {
-        // Check if the response mentions geometric concepts, graphs, or visual concepts
-        const visualKeywords = ["graph", "diagram", "shape", "triangle", "circle", "square", "plot", "curve", "line", "angle", "geometry", "coordinate", "axis", "visual"];
-        const hasVisualContext = visualKeywords.some(keyword => 
+        // Check if the response mentions graphs or visual mathematical concepts
+        const graphKeywords = ["graph", "parabola", "curve", "plot", "discriminant", "root", "solution", "x-axis", "y-axis", "coordinate"];
+        const hasGraphContext = graphKeywords.some(keyword => 
           lastMessage.content.toLowerCase().includes(keyword)
         );
-        setCanGenerateVisual(hasVisualContext);
+        setCanGenerateVisual(hasGraphContext);
       }
     }
   }, [messages]);
@@ -69,7 +73,7 @@ export const StepQuestionDialog = ({
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-visual-example`,
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-graph-data`,
         {
           method: "POST",
           headers: {
@@ -80,32 +84,33 @@ export const StepQuestionDialog = ({
             context: lastAssistantMessage.content,
             topic,
             gradeLevel,
+            stepContent,
+            stepExample,
           }),
         }
       );
 
       if (!response.ok) {
-        throw new Error("Failed to generate visual example");
+        throw new Error("Failed to generate graph data");
       }
 
       const data = await response.json();
-      const imageUrl = data.image;
 
-      if (imageUrl) {
+      if (data.graphData) {
         setMessages((prev) => [
           ...prev,
           {
             role: "assistant",
             content: "Here's a visual representation to help you understand:",
-            image: imageUrl,
+            graphData: data.graphData,
           },
         ]);
       }
     } catch (error) {
-      console.error("Error generating visual:", error);
+      console.error("Error generating graph:", error);
       toast({
         title: "Error",
-        description: "Failed to generate visual example. Please try again.",
+        description: "Failed to generate graph. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -268,12 +273,13 @@ export const StepQuestionDialog = ({
                     {message.content}
                   </ReactMarkdown>
                 </div>
-                {message.image && (
-                  <img 
-                    src={message.image} 
-                    alt="Visual example" 
-                    className="mt-3 rounded-lg max-w-full h-auto border border-border"
-                  />
+                {message.graphData && (
+                  <div className="mt-3">
+                    <MathGraph
+                      type={message.graphData.type}
+                      parameters={message.graphData.parameters}
+                    />
+                  </div>
                 )}
               </div>
             ))}

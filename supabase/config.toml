@@ -5,3 +5,6 @@ verify_jwt = false
 
 [functions.generate-visual-example]
 verify_jwt = false
+
+[functions.generate-graph-data]
+verify_jwt = false
