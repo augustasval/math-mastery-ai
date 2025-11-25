@@ -74,6 +74,9 @@ export const TheoryQuiz = ({ questions, onComplete, onReadTheory, onRetry }: The
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="text-center p-6 bg-secondary/20 rounded-lg">
+            <div className={`text-lg font-semibold mb-3 ${showPracticeButton ? 'text-green-600' : 'text-destructive'}`}>
+              {showPracticeButton ? '🎉 Quiz Passed!' : '📚 Keep Learning'}
+            </div>
             <p className="text-3xl font-bold mb-2">
               {score}/{questions.length}
             </p>
@@ -176,7 +179,7 @@ export const TheoryQuiz = ({ questions, onComplete, onReadTheory, onRetry }: The
         
         <RadioGroup
           key={currentQuestion}
-          value={selectedAnswer?.toString()}
+          value={selectedAnswer !== null ? selectedAnswer.toString() : ""}
           onValueChange={(value) => setSelectedAnswer(parseInt(value))}
         >
           {currentQ.options.map((option, index) => (
