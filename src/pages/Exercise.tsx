@@ -18,134 +18,8 @@ import { ExerciseSolutionQuestion } from "@/components/ExerciseSolutionQuestion"
 import { mistakeStorage } from "@/lib/mistakeStorage";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { exercises, type Problem, type DetailedStep } from "@/data";
 
-interface DetailedStep {
-  step: string;
-  explanation: string;
-}
-
-interface Problem {
-  id: string;
-  question: string;
-  answer: string;
-  hint: string;
-  detailedSolution: DetailedStep[];
-}
-
-// Topic-specific problem pools
-const problemsByTopic: Record<string, Problem[]> = {
-  "9-polynomials": [
-    {
-      id: "poly1",
-      question: "Simplify by combining like terms: $5x^2 + 3x - 2x^2 + 7x - 4$",
-      answer: "3x^2 + 10x - 4",
-      hint: "Group terms with the same power of x together.",
-      detailedSolution: [
-        { step: "$5x^2 + 3x - 2x^2 + 7x - 4$", explanation: "Original expression with mixed terms" },
-        { step: "$(5x^2 - 2x^2) + (3x + 7x) - 4$", explanation: "Group like terms: $x^2$ terms together, $x$ terms together" },
-        { step: "$3x^2 + 10x - 4$", explanation: "Combine coefficients: $5-2=3$ for $x^2$, $3+7=10$ for $x$" },
-      ],
-    },
-    {
-      id: "poly2",
-      question: "Expand: $(x + 4)(x + 3)$",
-      answer: "x^2 + 7x + 12",
-      hint: "Use FOIL: First, Outer, Inner, Last.",
-      detailedSolution: [
-        { step: "$(x + 4)(x + 3)$", explanation: "Two binomials to multiply together" },
-        { step: "$x \\cdot x + x \\cdot 3 + 4 \\cdot x + 4 \\cdot 3$", explanation: "Apply FOIL method: multiply each term in first by each term in second" },
-        { step: "$x^2 + 3x + 4x + 12$", explanation: "Perform each multiplication" },
-        { step: "$x^2 + 7x + 12$", explanation: "Combine like terms: $3x + 4x = 7x$" },
-      ],
-    },
-    {
-      id: "poly3",
-      question: "Calculate $(x - 2)^2$ using the special product formula",
-      answer: "x^2 - 4x + 4",
-      hint: "Use the pattern $(a - b)^2 = a^2 - 2ab + b^2$",
-      detailedSolution: [
-        { step: "$(x - 2)^2$", explanation: "Square of a binomial" },
-        { step: "Apply: $(a - b)^2 = a^2 - 2ab + b^2$ where $a=x, b=2$", explanation: "Use the special product formula for square of difference" },
-        { step: "$x^2 - 2(x)(2) + 2^2$", explanation: "Substitute values: $a^2 = x^2$, $2ab = 2(x)(2) = 4x$, $b^2 = 4$" },
-        { step: "$x^2 - 4x + 4$", explanation: "Simplify to get final expanded form" },
-      ],
-    },
-    {
-      id: "poly4",
-      question: "Add the polynomials: $(3x^2 - 2x + 1) + (x^2 + 5x - 3)$",
-      answer: "4x^2 + 3x - 2",
-      hint: "Combine terms with the same degree.",
-      detailedSolution: [
-        { step: "$(3x^2 - 2x + 1) + (x^2 + 5x - 3)$", explanation: "Two polynomials to add" },
-        { step: "$3x^2 + x^2 - 2x + 5x + 1 - 3$", explanation: "Remove parentheses and rearrange to group like terms" },
-        { step: "$(3x^2 + x^2) + (-2x + 5x) + (1 - 3)$", explanation: "Group terms by degree" },
-        { step: "$4x^2 + 3x - 2$", explanation: "Add coefficients: $3+1=4$, $-2+5=3$, $1-3=-2$" },
-      ],
-    },
-    {
-      id: "poly5",
-      question: "Multiply: $2x(3x^2 - x + 4)$",
-      answer: "6x^3 - 2x^2 + 8x",
-      hint: "Distribute 2x to each term inside the parentheses.",
-      detailedSolution: [
-        { step: "$2x(3x^2 - x + 4)$", explanation: "Monomial times polynomial - use distributive property" },
-        { step: "$2x \\cdot 3x^2 + 2x \\cdot (-x) + 2x \\cdot 4$", explanation: "Distribute $2x$ to each term" },
-        { step: "$6x^3 - 2x^2 + 8x$", explanation: "Multiply coefficients and add exponents: $2 \\cdot 3 = 6$, $x \\cdot x^2 = x^3$" },
-      ],
-    },
-  ],
-  "9-quadratics": [
-    {
-      id: "quad1",
-      question: "Solve by factoring: $x^2 + 5x + 6 = 0$",
-      answer: "-2,-3",
-      hint: "Find two numbers that multiply to 6 and add to 5.",
-      detailedSolution: [
-        { step: "$x^2 + 5x + 6 = 0$", explanation: "Quadratic equation in standard form" },
-        { step: "$(x + 2)(x + 3) = 0$", explanation: "Factor: need two numbers that multiply to 6 and add to 5, which are 2 and 3" },
-        { step: "$x + 2 = 0$ or $x + 3 = 0$", explanation: "Use zero product property: if product equals zero, one factor must be zero" },
-        { step: "$x = -2$ or $x = -3$", explanation: "Solve each equation: subtract 2 from first, subtract 3 from second" },
-      ],
-    },
-    {
-      id: "quad2",
-      question: "Solve using the quadratic formula: $x^2 - 4x + 3 = 0$",
-      answer: "1,3",
-      hint: "Use $x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$ with $a=1, b=-4, c=3$",
-      detailedSolution: [
-        { step: "Identify: $a=1, b=-4, c=3$", explanation: "Coefficients from standard form $ax^2 + bx + c = 0$" },
-        { step: "$\\Delta = (-4)^2 - 4(1)(3) = 16 - 12 = 4$", explanation: "Calculate discriminant to check for real solutions" },
-        { step: "$x = \\frac{-(-4) \\pm \\sqrt{4}}{2(1)} = \\frac{4 \\pm 2}{2}$", explanation: "Substitute into quadratic formula" },
-        { step: "$x = \\frac{4 + 2}{2} = 3$ or $x = \\frac{4 - 2}{2} = 1$", explanation: "Evaluate both solutions from $\\pm$" },
-      ],
-    },
-    {
-      id: "quad3",
-      question: "Factor completely: $2x^2 + 7x + 3$",
-      answer: "(2x + 1)(x + 3)",
-      hint: "Look for factors of $2 \\times 3 = 6$ that add to 7.",
-      detailedSolution: [
-        { step: "$2x^2 + 7x + 3$", explanation: "Quadratic with leading coefficient not equal to 1" },
-        { step: "Find factors of $2 \\times 3 = 6$ that add to 7: 6 and 1", explanation: "Use AC method: multiply $a$ and $c$, find factors that add to $b$" },
-        { step: "$2x^2 + 6x + x + 3$", explanation: "Split middle term: $7x = 6x + x$" },
-        { step: "$2x(x + 3) + 1(x + 3) = (2x + 1)(x + 3)$", explanation: "Factor by grouping: factor out common terms from pairs" },
-      ],
-    },
-    {
-      id: "quad4",
-      question: "Complete the square: $x^2 + 6x = 7$",
-      answer: "1,-7",
-      hint: "Add $(\\frac{6}{2})^2$ to both sides.",
-      detailedSolution: [
-        { step: "$x^2 + 6x = 7$", explanation: "Equation not in standard form, constant on right side" },
-        { step: "$x^2 + 6x + 9 = 7 + 9$", explanation: "Complete the square: add $(\\frac{b}{2})^2 = (\\frac{6}{2})^2 = 9$ to both sides" },
-        { step: "$(x + 3)^2 = 16$", explanation: "Left side is perfect square: $(x + 3)^2$. Right side: $7 + 9 = 16$" },
-        { step: "$x + 3 = \\pm 4$", explanation: "Take square root of both sides (don't forget $\\pm$)" },
-        { step: "$x = -3 + 4 = 1$ or $x = -3 - 4 = -7$", explanation: "Solve for $x$: subtract 3 from both cases" },
-      ],
-    },
-  ],
-};
 
 const Exercise = () => {
   const navigate = useNavigate();
@@ -170,7 +44,8 @@ const Exercise = () => {
     ? '9-polynomials' 
     : '9-quadratics';
   
-  const sampleProblems = problemsByTopic[topicId] || problemsByTopic['9-quadratics'];
+  const exerciseSet = exercises[topicId] || exercises['9-quadratics'];
+  const sampleProblems = exerciseSet?.problems || [];
   const currentProblem = sampleProblems[currentProblemIndex];
   const isAllComplete = completedCount >= 4;
 

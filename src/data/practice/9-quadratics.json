@@ -1,0 +1,103 @@
+{
+  "topicId": "9-quadratics",
+  "problems": [
+    {
+      "id": "q1",
+      "question": "Solve: $x^2 - 5x + 6 = 0$",
+      "answer": "2,3",
+      "hint": "Try factoring first! Look for two numbers that multiply to 6 and add to -5",
+      "detailedSolution": [
+        {
+          "step": "$x^2 - 5x + 6 = 0$",
+          "explanation": "We start with our quadratic equation in standard form, where a=1, b=-5, and c=6."
+        },
+        {
+          "step": "$(x - 2)(x - 3) = 0$",
+          "explanation": "We factor the quadratic by finding two numbers that multiply to give us 6 and add to give us -5. Those numbers are -2 and -3, so we write the factored form."
+        },
+        {
+          "step": "$x - 2 = 0$ or $x - 3 = 0$",
+          "explanation": "Using the zero product property, if two things multiply to give zero, at least one of them must be zero. So we set each factor equal to zero."
+        },
+        {
+          "step": "$x = 2$ or $x = 3$",
+          "explanation": "Solving each simple equation gives us our two solutions. We can verify by substituting back: when x=2, we get 4-10+6=0 ✓, and when x=3, we get 9-15+6=0 ✓"
+        }
+      ]
+    },
+    {
+      "id": "q2",
+      "question": "Solve using the quadratic formula: $2x^2 + 3x - 5 = 0$",
+      "answer": "1,-2.5",
+      "hint": "Use the formula: $x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$ with a=2, b=3, c=-5",
+      "detailedSolution": [
+        {
+          "step": "Identify: $a=2, b=3, c=-5$",
+          "explanation": "First, we identify the coefficients from our equation in standard form ax²+bx+c=0."
+        },
+        {
+          "step": "$\\Delta = b^2 - 4ac = 3^2 - 4(2)(-5) = 9 + 40 = 49$",
+          "explanation": "We calculate the discriminant (Δ) to understand what kind of solutions we'll get. Since 49 is positive, we'll have two real solutions."
+        },
+        {
+          "step": "$x = \\frac{-3 \\pm \\sqrt{49}}{2(2)} = \\frac{-3 \\pm 7}{4}$",
+          "explanation": "We substitute all our values into the quadratic formula. The square root of 49 is 7, which makes our calculation simpler."
+        },
+        {
+          "step": "$x = \\frac{-3 + 7}{4} = 1$ or $x = \\frac{-3 - 7}{4} = -2.5$",
+          "explanation": "We solve for both cases: when we add 7 to -3, we get 4/4 = 1. When we subtract 7 from -3, we get -10/4 = -2.5. These are our two solutions."
+        }
+      ]
+    },
+    {
+      "id": "q3",
+      "question": "Factor: $x^2 + 8x + 15$",
+      "answer": "(x + 3)(x + 5)",
+      "hint": "Find two numbers that multiply to 15 and add to 8.",
+      "detailedSolution": [
+        { "step": "$x^2 + 8x + 15$", "explanation": "Quadratic expression to factor" },
+        { "step": "Find factors of 15 that add to 8: 3 and 5", "explanation": "Need two numbers with product 15 and sum 8" },
+        { "step": "$(x + 3)(x + 5)$", "explanation": "Write as product of two binomials using those numbers" },
+        { "step": "Check: $(x+3)(x+5) = x^2 + 5x + 3x + 15 = x^2 + 8x + 15$ ✓", "explanation": "Verify by expanding" }
+      ]
+    },
+    {
+      "id": "q4",
+      "question": "Solve: $x^2 = 9$",
+      "answer": "3,-3",
+      "hint": "Take the square root of both sides (don't forget ±).",
+      "detailedSolution": [
+        { "step": "$x^2 = 9$", "explanation": "Simple quadratic equation" },
+        { "step": "$x = \\pm \\sqrt{9}$", "explanation": "Take square root of both sides. The ± is crucial!" },
+        { "step": "$x = \\pm 3$", "explanation": "Square root of 9 is 3" },
+        { "step": "$x = 3$ or $x = -3$", "explanation": "Two solutions because both $3^2 = 9$ and $(-3)^2 = 9$" }
+      ]
+    },
+    {
+      "id": "q5",
+      "question": "Find the discriminant of $x^2 - 6x + 9 = 0$ and describe the solutions",
+      "answer": "0",
+      "hint": "Calculate $b^2 - 4ac$. What does it tell you?",
+      "detailedSolution": [
+        { "step": "Identify: $a=1, b=-6, c=9$", "explanation": "Coefficients from standard form" },
+        { "step": "$\\Delta = b^2 - 4ac = (-6)^2 - 4(1)(9)$", "explanation": "Substitute into discriminant formula" },
+        { "step": "$\\Delta = 36 - 36 = 0$", "explanation": "Calculate: $36 - 36 = 0$" },
+        { "step": "One repeated real solution", "explanation": "When discriminant is 0, there is exactly one solution (repeated root)" }
+      ]
+    },
+    {
+      "id": "q6",
+      "question": "Solve by completing the square: $x^2 + 4x - 5 = 0$",
+      "answer": "1,-5",
+      "hint": "Move constant to right side, then add $(\\frac{4}{2})^2$ to both sides.",
+      "detailedSolution": [
+        { "step": "$x^2 + 4x - 5 = 0$", "explanation": "Original equation" },
+        { "step": "$x^2 + 4x = 5$", "explanation": "Move constant to right side" },
+        { "step": "$x^2 + 4x + 4 = 5 + 4$", "explanation": "Add $(\\frac{b}{2})^2 = (\\frac{4}{2})^2 = 4$ to both sides" },
+        { "step": "$(x + 2)^2 = 9$", "explanation": "Left side is perfect square: $(x + 2)^2$" },
+        { "step": "$x + 2 = \\pm 3$", "explanation": "Take square root: $\\sqrt{9} = 3$" },
+        { "step": "$x = -2 + 3 = 1$ or $x = -2 - 3 = -5$", "explanation": "Solve: subtract 2 from both results" }
+      ]
+    }
+  ]
+}
