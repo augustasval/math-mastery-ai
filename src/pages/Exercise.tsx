@@ -29,7 +29,7 @@ const Exercise = () => {
   const [completedCount, setCompletedCount] = useState(0);
   const [isCompleting, setIsCompleting] = useState(false);
   const [selectedIncorrectSteps, setSelectedIncorrectSteps] = useState<number[]>([]);
-  const { tasks, markTaskComplete } = useLearningPlan();
+  const { plan, tasks, markTaskComplete } = useLearningPlan();
   const { incrementExercise } = useTaskProgress();
 
   // Get current task to determine topic
@@ -39,10 +39,8 @@ const Exercise = () => {
     return taskDate.toDateString() === today.toDateString() && !t.is_completed;
   });
 
-  // Determine which problem set to use based on task topic
-  const topicId = currentTask?.title.toLowerCase().includes('polynomial') 
-    ? '9-polynomials' 
-    : '9-quadratics';
+  // Use topic from learning plan
+  const topicId = plan?.topic_id || '9-quadratics';
   
   const exerciseSet = exercises[topicId] || exercises['9-quadratics'];
   const sampleProblems = exerciseSet?.problems || [];
