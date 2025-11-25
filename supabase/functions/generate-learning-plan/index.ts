@@ -13,7 +13,24 @@ serve(async (req) => {
   }
 
   try {
-    const { grade, topicId, topicName, testDate, sessionId } = await req.json();
+    // Read body as text first for better error handling
+    const bodyText = await req.text();
+    console.log('Request body:', bodyText);
+    
+    let requestData;
+    try {
+      requestData = JSON.parse(bodyText);
+    } catch (parseError) {
+      console.error('JSON parse error:', parseError);
+      const errorMsg = parseError instanceof Error ? parseError.message : 'Unknown parse error';
+      throw new Error(`Invalid JSON in request body: ${errorMsg}`);
+    }
+    
+    const { grade, topicId, topicName, testDate, sessionId } = requestData;
+    
+    if (!grade || !topicId || !topicName || !testDate || !sessionId) {
+      throw new Error('Missing required fields: grade, topicId, topicName, testDate, sessionId');
+    }
     
     console.log('Generating learning plan for:', { grade, topicId, topicName, testDate, sessionId });
 
