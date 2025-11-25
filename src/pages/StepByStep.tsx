@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { BookOpen, ChevronRight, Loader2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -194,6 +195,7 @@ const lessons: Record<string, Lesson> = {
 };
 
 const StepByStep = () => {
+  const navigate = useNavigate();
   const [selectedGrade, setSelectedGrade] = useState("9");
   const [selectedTopic, setSelectedTopic] = useState("9-quadratics");
   const [currentStep, setCurrentStep] = useState(0);
@@ -232,6 +234,10 @@ const StepByStep = () => {
       setQuizQuestions(questions);
       setShowQuiz(true);
     }, 100);
+  };
+
+  const handleStartPractice = () => {
+    navigate('/practice');
   };
 
   return (
@@ -360,6 +366,7 @@ const StepByStep = () => {
                 onComplete={handleQuizComplete}
                 onReadTheory={handleReadTheory}
                 onRetry={handleRetryQuiz}
+                onStartPractice={handleStartPractice}
               />
             )}
           </Card>
