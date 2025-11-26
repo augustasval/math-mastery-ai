@@ -239,4 +239,36 @@ export const lt = {
   personalizedPlanReady: (days: number) => `Jūsų personalizuotas ${days} dienų mokymosi planas paruoštas.`,
   errorCreatingPlan: "Klaida kuriant planą",
   errorTryAgain: (error: string) => `${error}. Bandykite dar kartą arba susisiekite su palaikymu, jei problema išlieka.`,
+  
+  // Užduočių tipai
+  taskTypeTheory: "Teorija",
+  taskTypePractice: "Praktika",
+  taskTypeReview: "Apžvalga",
+  taskTypeQuiz: "Testas",
+  
+  // Klaidų šablonai
+  patternFactor: "Skaidymo",
+  patternMultiply: "Dauginimo",
+  patternAdd: "Sudėties",
+  patternSubtract: "Atimties",
+  patternSteps: "žingsniai",
+  noneDetected: "Neaptikta",
+  ofExercise: "pratimų klaidų",
+  
+  // Temų pavadinimai
+  topicPolynomials: "Polinomai",
+  topicQuadratics: "Kvadratinės lygtys",
+  
+  // Rekomendacijos
+  recommendationFocus: (keyword: string, count: number) => `Sutelkite dėmesį į ${keyword} technikas - su jomis susiduriate sunkumų ${count} kartų`,
+  recommendationPractice: (topic: string) => `Praktikuokite daugiau ${topic} uždavinių - tai jūsų sudėtingiausia sritis`,
+  recommendationProgress: (percent: number) => `Puikus progresas! Sumažinote klaidas ${percent}% šią savaitę`,
+  recommendationStreak: (days: number) => `${days} dienų be klaidų! Tęskite šį puikų darbą!`,
+  
+  // Užduočių aprašymai
+  taskDescriptionTheory: (topic: string) => `Mokykitės teorijos ir sąvokų susijusių su ${topic}`,
+  taskDescriptionPractice: (topic: string) => `Spręskite praktines užduotis apie ${topic}`,
+  existingPlanError: "Jau turite mokymosi planą. Pirmiausia ištrinkite jį, kad sukurtumėte naują.",
+  fallbackPlanNotice: "Nepavyko sugeneruoti plano. Naudojama atsarginė versija.",
+  mistakeSaved: "Klaida išsaugota peržiūrai",
 };
