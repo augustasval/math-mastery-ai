@@ -5,6 +5,7 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Navigation } from "@/components/Navigation";
 import { OnboardingModal } from "@/components/OnboardingModal";
+import { LanguageSelector } from "@/components/LanguageSelector";
 import { useLearningPlan } from "@/hooks/useLearningPlan";
 import { useNavigate } from "react-router-dom";
 import { CheckCircle2, Circle, Calendar, BookOpen, Target, Loader2, Settings, AlertCircle } from "lucide-react";
@@ -12,11 +13,13 @@ import { format, differenceInDays, parseISO, isToday, isPast } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
 import { SessionManager } from "@/lib/sessionManager";
 import { toast } from "sonner";
+import { useTranslation } from "@/translations";
 
 const Home = () => {
   const navigate = useNavigate();
   const { plan, tasks, loading, markTaskComplete, refetch } = useLearningPlan();
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const t = useTranslation();
 
   useEffect(() => {
     // Show onboarding if no plan exists
@@ -94,7 +97,7 @@ const Home = () => {
         navigate('/exercice');
       } else {
         // Task fully complete
-        toast.info("This task is already completed!");
+        toast.info(t.taskAlreadyCompleted);
       }
     } catch (error) {
       console.error('Error checking task progress:', error);
@@ -110,13 +113,14 @@ const Home = () => {
           {/* Brand Header with Settings */}
           <div className="flex items-center justify-between">
             <div className="flex-1" />
-            <h1 className="text-4xl font-bold text-center">CorePus</h1>
+            <h1 className="text-4xl font-bold text-center">{t.appName}</h1>
             <div className="flex-1 flex justify-end gap-2">
+              <LanguageSelector />
               <Button 
                 variant="outline" 
                 size="icon"
                 onClick={() => navigate('/mistakes')}
-                title="View Mistakes"
+                title={t.viewMistakes}
               >
                 <AlertCircle className="h-5 w-5" />
               </Button>
@@ -124,7 +128,7 @@ const Home = () => {
                 variant="outline" 
                 size="icon"
                 onClick={() => setShowOnboarding(true)}
-                title="Settings"
+                title={t.settings}
               >
                 <Settings className="h-5 w-5" />
               </Button>
@@ -137,7 +141,7 @@ const Home = () => {
               <div>
                 <h2 className="text-2xl font-bold">{plan.topic_name}</h2>
                 <p className="text-sm text-muted-foreground">
-                  Grade {plan.grade}
+                  {t.grade} {plan.grade}
                 </p>
               </div>
               <div className="text-right">
@@ -148,9 +152,9 @@ const Home = () => {
             <Progress value={progressPercentage} className="h-2 mb-4" />
             
             <div className="flex items-center justify-between text-sm text-muted-foreground">
-              <span>{completedTasks.length} of {tasks.length} tasks completed</span>
+              <span>{completedTasks.length} {t.tasksOf} {tasks.length} {t.tasksCompleted}</span>
               <span>
-                Test in {daysUntilExam > 0 ? `${daysUntilExam} days` : "today"} • {format(parseISO(plan.test_date), "MMM d, yyyy")}
+                {t.testIn} {daysUntilExam > 0 ? `${daysUntilExam} ${daysUntilExam === 1 ? t.day : t.days}` : t.todayTime} • {format(parseISO(plan.test_date), "MMM d, yyyy")}
               </span>
             </div>
           </Card>
@@ -162,13 +166,13 @@ const Home = () => {
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <div>
-                    <CardTitle className="text-xl">Today</CardTitle>
+                    <CardTitle className="text-xl">{t.today}</CardTitle>
                     <CardDescription className="mt-1">
-                      {todayTasks.length} {todayTasks.length === 1 ? 'task' : 'tasks'} scheduled
+                      {todayTasks.length} {todayTasks.length === 1 ? t.taskScheduled : t.tasksScheduled}
                     </CardDescription>
                   </div>
                   <Button onClick={() => todayTasks.length > 0 && navigateToTask(todayTasks[0])} size="lg">
-                    Start
+                    {t.start}
                   </Button>
                 </div>
               </CardHeader>
@@ -202,9 +206,9 @@ const Home = () => {
           {pastTasks.length > 0 && (
             <Card>
               <CardHeader>
-                <CardTitle className="text-xl">Past</CardTitle>
+                <CardTitle className="text-xl">{t.past}</CardTitle>
                 <CardDescription>
-                  {completedTasks.length} of {pastTasks.length} completed
+                  {completedTasks.length} {t.tasksOf} {pastTasks.length} {t.completed}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -236,11 +240,11 @@ const Home = () => {
                           </Badge>
                           {task.is_completed ? (
                             <Badge variant="outline" className="bg-green-500/10 text-green-700 dark:text-green-400 border-green-500/30 text-xs">
-                              Done
+                              {t.done}
                             </Badge>
                           ) : (
                             <Badge variant="outline" className="bg-muted text-muted-foreground border-muted text-xs">
-                              Missed
+                              {t.missed}
                             </Badge>
                           )}
                         </div>
@@ -256,9 +260,9 @@ const Home = () => {
           {upcomingTasks.length > 0 && (
             <Card>
               <CardHeader>
-                <CardTitle className="text-xl">Upcoming</CardTitle>
+                <CardTitle className="text-xl">{t.upcoming}</CardTitle>
                 <CardDescription>
-                  {upcomingTasks.length} {upcomingTasks.length === 1 ? 'task' : 'tasks'} scheduled
+                  {upcomingTasks.length} {upcomingTasks.length === 1 ? t.taskScheduled : t.tasksScheduled}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -287,7 +291,7 @@ const Home = () => {
                             variant="outline"
                             onClick={() => navigateToTask(task)}
                           >
-                            Start
+                            {t.start}
                           </Button>
                         </div>
                       </div>

@@ -1,5 +1,6 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
+import { useTranslation } from "@/translations";
 
 export interface CurriculumTopic {
   id: string;
@@ -28,27 +29,28 @@ export const GradeTopicSelector = ({
   onTopicChange,
 }: GradeTopicSelectorProps) => {
   const topics = curriculumTopics[selectedGrade] || [];
+  const t = useTranslation();
 
   return (
     <Card className="p-4 bg-accent/5 border-accent">
       <div className="grid md:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <label className="text-sm font-medium">Grade Level</label>
+          <label className="text-sm font-medium">{t.gradeLevel}</label>
           <Select value={selectedGrade} onValueChange={onGradeChange}>
             <SelectTrigger>
-              <SelectValue placeholder="Select grade" />
+              <SelectValue placeholder={t.selectGrade} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="9">Grade 9</SelectItem>
+              <SelectItem value="9">{t.grade9}</SelectItem>
             </SelectContent>
           </Select>
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium">Curriculum Topic</label>
+          <label className="text-sm font-medium">{t.curriculumTopic}</label>
           <Select value={selectedTopic} onValueChange={onTopicChange}>
             <SelectTrigger>
-              <SelectValue placeholder="Select topic" />
+              <SelectValue placeholder={t.selectTopic} />
             </SelectTrigger>
             <SelectContent>
               {topics.map((topic) => (
