@@ -1,0 +1,74 @@
+{
+  "topicId": "9-polynomials-lt",
+  "problems": [
+    {
+      "id": "poly-p1-lt",
+      "question": "Koks yra polinomo $7x^4 - 3x^2 + 2x - 9$ laipsnis?",
+      "answer": "4",
+      "hint": "Laipsnis yra didžiausias kintamojo rodiklis.",
+      "detailedSolution": [
+        { "step": "$7x^4 - 3x^2 + 2x - 9$", "explanation": "Pažiūrėkite į kiekvieną polinomo narį" },
+        { "step": "Rodikliai: 4, 2, 1, 0", "explanation": "Rodikliai yra 4 (iš $x^4$), 2 (iš $x^2$), 1 (iš $x$) ir 0 (konstanta)" },
+        { "step": "Didžiausias rodiklis: 4", "explanation": "Laipsnis yra didžiausias rodiklis, kuris yra 4" }
+      ]
+    },
+    {
+      "id": "poly-p2-lt",
+      "question": "Supaprastinkite: $(4x^2 + 2x - 1) + (3x^2 - 5x + 4)$",
+      "answer": "7x^2 - 3x + 3",
+      "hint": "Sujunkite panašius narius su atitinkamais x laipsniais.",
+      "detailedSolution": [
+        { "step": "$(4x^2 + 2x - 1) + (3x^2 - 5x + 4)$", "explanation": "Pašalinkite skliaustus, nes sudedame" },
+        { "step": "$4x^2 + 3x^2 + 2x - 5x - 1 + 4$", "explanation": "Sugrupuokite narius pagal laipsnį" },
+        { "step": "$7x^2 - 3x + 3$", "explanation": "Sudėkite koeficientus: $4+3=7$, $2-5=-3$, $-1+4=3$" }
+      ]
+    },
+    {
+      "id": "poly-p3-lt",
+      "question": "Atimkite: $(6x^3 + x^2 - 2) - (2x^3 - 3x^2 + 5)$",
+      "answer": "4x^3 + 4x^2 - 7",
+      "hint": "Paskirstykite minuso ženklą visiems antro polinomo nariams.",
+      "detailedSolution": [
+        { "step": "$(6x^3 + x^2 - 2) - (2x^3 - 3x^2 + 5)$", "explanation": "Pradinė atimties užduotis" },
+        { "step": "$6x^3 + x^2 - 2 - 2x^3 + 3x^2 - 5$", "explanation": "Paskirstykite minusą: pakeiskite visų antrojo polinomo narių ženklus" },
+        { "step": "$(6x^3 - 2x^3) + (x^2 + 3x^2) + (-2 - 5)$", "explanation": "Sugrupuokite panašius narius" },
+        { "step": "$4x^3 + 4x^2 - 7$", "explanation": "Sujunkite: $6-2=4$, $1+3=4$, $-2-5=-7$" }
+      ]
+    },
+    {
+      "id": "poly-p4-lt",
+      "question": "Išskleiskite: $(x + 5)(x - 2)$",
+      "answer": "x^2 + 3x - 10",
+      "hint": "Naudokite FOIL metodą arba paskirstomąjį dėsnį.",
+      "detailedSolution": [
+        { "step": "$(x + 5)(x - 2)$", "explanation": "Dauginame du binomus" },
+        { "step": "$x \\cdot x + x \\cdot (-2) + 5 \\cdot x + 5 \\cdot (-2)$", "explanation": "FOIL: Pirmas, Išorinis, Vidinis, Paskutinis" },
+        { "step": "$x^2 - 2x + 5x - 10$", "explanation": "Atlikite daugybas" },
+        { "step": "$x^2 + 3x - 10$", "explanation": "Sujunkite panašius narius: $-2x + 5x = 3x$" }
+      ]
+    },
+    {
+      "id": "poly-p5-lt",
+      "question": "Apskaičiuokite $(x + 6)^2$",
+      "answer": "x^2 + 12x + 36",
+      "hint": "Naudokite formulę $(a + b)^2 = a^2 + 2ab + b^2$",
+      "detailedSolution": [
+        { "step": "$(x + 6)^2$", "explanation": "Binomo kvadratas" },
+        { "step": "$(a + b)^2 = a^2 + 2ab + b^2$ kur $a=x, b=6$", "explanation": "Taikykite specialios sandaugos formulę" },
+        { "step": "$x^2 + 2(x)(6) + 6^2$", "explanation": "Įstatykite ir apskaičiuokite kiekvieną dalį" },
+        { "step": "$x^2 + 12x + 36$", "explanation": "Supaprastinkite: $2 \\cdot 6 = 12$, $6^2 = 36$" }
+      ]
+    },
+    {
+      "id": "poly-p6-lt",
+      "question": "Padauginkite: $3x(2x^2 - 5x + 1)$",
+      "answer": "6x^3 - 15x^2 + 3x",
+      "hint": "Paskirstykite 3x kiekvienam nariui.",
+      "detailedSolution": [
+        { "step": "$3x(2x^2 - 5x + 1)$", "explanation": "Monomą kartų polinomas" },
+        { "step": "$3x \\cdot 2x^2 + 3x \\cdot (-5x) + 3x \\cdot 1$", "explanation": "Paskirstykite $3x$ kiekvienam nariui" },
+        { "step": "$6x^3 - 15x^2 + 3x$", "explanation": "Padauginkite: $3 \\cdot 2 = 6$ su $x \\cdot x^2 = x^3$, ir t.t." }
+      ]
+    }
+  ]
+}

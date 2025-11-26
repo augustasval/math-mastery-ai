@@ -18,7 +18,7 @@ import { ExerciseSolutionQuestion } from "@/components/ExerciseSolutionQuestion"
 import { mistakeStorage } from "@/lib/mistakeStorage";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { exercises, type Problem, type DetailedStep } from "@/data";
+import { useLocalizedContent, type Problem, type DetailedStep } from "@/data";
 import { useTranslation } from "@/translations";
 
 
@@ -33,6 +33,7 @@ const Exercise = () => {
   const { plan, tasks, markTaskComplete } = useLearningPlan();
   const { incrementExercise } = useTaskProgress();
   const t = useTranslation();
+  const { getExercises } = useLocalizedContent();
 
   // Get current task to determine topic
   const currentTask = tasks.find(t => {
@@ -44,7 +45,7 @@ const Exercise = () => {
   // Use topic from learning plan
   const topicId = plan?.topic_id || '9-quadratics';
   
-  const exerciseSet = exercises[topicId] || exercises['9-quadratics'];
+  const exerciseSet = getExercises(topicId) || getExercises('9-quadratics');
   const sampleProblems = exerciseSet?.problems || [];
   const currentProblem = sampleProblems[currentProblemIndex];
   const isAllComplete = completedCount >= 4;

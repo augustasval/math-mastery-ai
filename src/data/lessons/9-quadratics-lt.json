@@ -1,0 +1,80 @@
+{
+  "topicId": "9-quadratics-lt",
+  "title": "Kvadratinės lygtys",
+  "introduction": "Kvadratinė lygtis yra antrojo laipsnio polinominė lygtis. Išmokime, kaip jas spręsti žingsnis po žingsnio.",
+  "steps": [
+    {
+      "title": "Standartinės formos supratimas",
+      "explanation": "Kiekviena kvadratinė lygtis gali būti užrašyta kaip $ax^2 + bx + c = 0$. Čia nustatome tris svarbias dalis: $x^2$ koeficientą (vadinamą $a$), $x$ koeficientą (vadinamą $b$) ir laisvąjį narį (vadinamą $c$). Labai svarbu, kad $a$ nebūtų nulis, nes jei būtų, nebūtų $x^2$ nario ir tai nebūtų kvadratinė lygtis.",
+      "example": "Lygtyje $3x^2 + 7x - 2 = 0$ nustatome: $a = 3$, $b = 7$ ir $c = -2$",
+      "tip": "Visada užrašykite lygtį standartine forma prieš spręsdami!",
+      "quizQuestion": {
+        "question": "Kvadratinėje lygtyje $2x^2 - 5x + 3 = 0$, kokia yra koeficiento $b$ reikšmė?",
+        "options": ["2", "-5", "3", "0"],
+        "correctAnswer": 1,
+        "explanation": "Koeficientas $b$ yra skaičius prieš $x$. Šioje lygtyje tai yra $-5$."
+      }
+    },
+    {
+      "title": "Kvadratinė formulė",
+      "explanation": "Kvadratinė formulė yra mūsų pagrindinis įrankis šioms lygtims spręsti. Formulė yra: $$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$ Ši formulė veikia bet kuriai kvadratinei lygčiai. Simbolis $\\pm$ reiškia, kad gausime du sprendinius - vieną naudojant sudėtį ir vieną naudojant atimtį.",
+      "example": "Šią formulę naudosime su reikšmėmis $a$, $b$ ir $c$, kurias nustatėme 1 žingsnyje.",
+      "quizQuestion": {
+        "question": "Ką reiškia simbolis $\\pm$ kvadratinėje formulėje?",
+        "options": [
+          "Mes dauginame iš teigiamų ir neigiamų reikšmių",
+          "Gauname du sprendinius naudodami sudėtį ir atimtį",
+          "Atsakymas gali būti teigiamas arba neigiamas",
+          "Turime patikrinti abi galimybes"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Simbolis $\\pm$ reiškia, kad atliekame skaičiavimą du kartus: vieną kartą su sudėtimi $(+)$ ir vieną kartą su atimtimi $(-)$, gaudami du skirtingus sprendinius."
+      }
+    },
+    {
+      "title": "Diskriminanto skaičiavimas",
+      "explanation": "Prieš spręsdami, apskaičiuojame kažką, vadinamą diskriminantu: $\\Delta = b^2 - 4ac$. Šis specialus skaičius suteikia mums svarbios informacijos apie sprendinius. Jei diskriminantas teigiamas, gauname du skirtingus realiuosius sprendinius. Jei lygus nuliui, gauname vienintelį sprendinį. Jei neigiamas, neturime realių sprendinių.",
+      "example": "Lygčiai $3x^2 + 7x - 2 = 0$: $\\Delta = 7^2 - 4(3)(-2) = 49 + 24 = 73$. Kadangi 73 yra teigiamas, turėsime du realiuosius sprendinius.",
+      "tip": "Visada pirmiausia patikrinkite diskriminantą - tai sutaupo laiko!",
+      "quizQuestion": {
+        "question": "Jei diskriminantas $\\Delta = 0$, kiek realių sprendinių turi kvadratinė lygtis?",
+        "options": [
+          "Nėra realių sprendinių",
+          "Tiksliai vienas sprendinys",
+          "Du skirtingi sprendiniai",
+          "Be galo daug sprendinių"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Kai diskriminantas lygus nuliui, kvadratinė lygtis turi tiksliai vieną realųjį sprendinį (taip pat vadinamą kartotiniu arba dvigubu šaknimi)."
+      }
+    },
+    {
+      "title": "Formulės taikymas",
+      "explanation": "Dabar įstatome savo reikšmes į kvadratinę formulę. Imame $b$ ir pakeičiame jo ženklą skaitikliui, tada pridedame ir atimame diskriminanto kvadratinę šaknį, ir galiausiai viską padalijame iš $2a$. Dirbkime tai atsargiai.",
+      "example": "$$x = \\frac{-7 \\pm \\sqrt{73}}{6}$$. Tai duoda mums $x_1 = \\frac{-7 + \\sqrt{73}}{6} \\approx 0.26$ ir $x_2 = \\frac{-7 - \\sqrt{73}}{6} \\approx -2.59$",
+      "quizQuestion": {
+        "question": "Kvadratinėje formulėje, iš ko dalijame pabaigoje?",
+        "options": ["$a$", "$2a$", "$b$", "$2b$"],
+        "correctAnswer": 1,
+        "explanation": "Visas skaitiklis $-b \\pm \\sqrt{b^2-4ac}$ dalijamas iš $2a$, kad gautume galutinius sprendinius."
+      }
+    },
+    {
+      "title": "Sprendinių tikrinimas",
+      "explanation": "Paskutinis žingsnis yra patikrinti mūsų darbą, įstatant sprendinius atgal į pradinę lygtį. Tai patvirtina, kad nepadarėme skaičiavimo klaidų. Kiekvienas sprendinys turėtų padaryti lygtį lygią nuliui.",
+      "example": "Patikrinkime su $x \\approx 0.26$: $3(0.26)^2 + 7(0.26) - 2 \\approx 0$ ✓",
+      "tip": "Visada tikrinkite! Tai yra atsargaus matematiko ženklas.",
+      "quizQuestion": {
+        "question": "Kodėl svarbu patikrinti sprendinius, juos įstatant atgal į pradinę lygtį?",
+        "options": [
+          "Tai nereikalinga, jei teisingai naudojote formulę",
+          "Kad patvirtintumėte, jog nebuvo skaičiavimo klaidų",
+          "Kad rastumėte papildomus sprendinius",
+          "Kad supaprastintumėte atsakymą"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Tikrinimas padeda pastebėti bet kokias aritmetines klaidas, padarytas sprendimo proceso metu. Kiekvienas sprendinys turėtų padaryti pradinę lygtį lygią nuliui."
+      }
+    }
+  ]
+}
