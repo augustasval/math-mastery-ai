@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { getOrCreateSessionId } from "@/lib/session";
 import { SessionManager } from "@/lib/sessionManager";
+import { useTranslation } from "@/translations";
 
 interface OnboardingModalProps {
   open: boolean;
@@ -28,6 +29,7 @@ export const OnboardingModal = ({ open, onComplete, existingPlan, onClose }: Onb
   const [testDate, setTestDate] = useState<Date>();
   const [isGenerating, setIsGenerating] = useState(false);
   const { toast } = useToast();
+  const t = useTranslation();
 
   const generateLocalPlan = async (sessionId: string, topic: any, daysUntilTest: number) => {
     // Create local fallback plan when Edge Function is not available
@@ -453,10 +455,10 @@ export const OnboardingModal = ({ open, onComplete, existingPlan, onClose }: Onb
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-2xl">
             <Sparkles className="h-6 w-6 text-primary" />
-            Welcome to Your Math Journey
+            {t.welcomeTitle}
           </DialogTitle>
           <DialogDescription>
-            Let's create a personalized learning plan to help you succeed on your upcoming test.
+            {t.welcomeDescription}
           </DialogDescription>
         </DialogHeader>
 
@@ -464,9 +466,9 @@ export const OnboardingModal = ({ open, onComplete, existingPlan, onClose }: Onb
           {step === 1 && (
             <div className="space-y-4">
               <div className="text-center space-y-2 py-4">
-                <h3 className="text-lg font-semibold">Step 1: Choose Your Topic</h3>
+                <h3 className="text-lg font-semibold">{t.step1Title}</h3>
                 <p className="text-sm text-muted-foreground">
-                  Select the grade level and curriculum topic you need to study.
+                  {t.step1Description}
                 </p>
               </div>
               
@@ -483,7 +485,7 @@ export const OnboardingModal = ({ open, onComplete, existingPlan, onClose }: Onb
                   disabled={!selectedGrade || !selectedTopicId}
                   size="lg"
                 >
-                  Next Step
+                  {t.next}
                 </Button>
               </div>
             </div>
@@ -492,9 +494,9 @@ export const OnboardingModal = ({ open, onComplete, existingPlan, onClose }: Onb
           {step === 2 && (
             <div className="space-y-4">
               <div className="text-center space-y-2 py-4">
-                <h3 className="text-lg font-semibold">Step 2: Set Your Test Date</h3>
+                <h3 className="text-lg font-semibold">{t.step2Title}</h3>
                 <p className="text-sm text-muted-foreground">
-                  When is your exam? We'll create a study plan that gets you ready in time.
+                  {t.step2Description}
                 </p>
               </div>
 
@@ -516,14 +518,14 @@ export const OnboardingModal = ({ open, onComplete, existingPlan, onClose }: Onb
 
               <div className="flex justify-between">
                 <Button variant="outline" onClick={() => setStep(1)}>
-                  Back
+                  {t.back}
                 </Button>
                 <Button
                   onClick={() => setStep(3)}
                   disabled={!testDate}
                   size="lg"
                 >
-                  Next Step
+                  {t.next}
                 </Button>
               </div>
             </div>
@@ -559,7 +561,7 @@ export const OnboardingModal = ({ open, onComplete, existingPlan, onClose }: Onb
 
               <div className="flex justify-between">
                 <Button variant="outline" onClick={() => setStep(2)} disabled={isGenerating}>
-                  Back
+                  {t.back}
                 </Button>
                 <Button
                   onClick={handleGeneratePlan}
@@ -570,12 +572,12 @@ export const OnboardingModal = ({ open, onComplete, existingPlan, onClose }: Onb
                   {isGenerating ? (
                     <>
                       <Loader2 className="h-4 w-4 animate-spin" />
-                      Generating Plan...
+                      {t.creatingPlan}
                     </>
                   ) : (
                     <>
                       <Sparkles className="h-4 w-4" />
-                      Generate My Plan
+                      {t.generatePlan}
                     </>
                   )}
                 </Button>

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeft, ChevronRight, Lightbulb, PartyPopper, BookOpen, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { useTranslation } from "@/translations";
 
 import { Badge } from "@/components/ui/badge";
 import ReactMarkdown from "react-markdown";
@@ -31,6 +32,7 @@ const Exercise = () => {
   const [selectedIncorrectSteps, setSelectedIncorrectSteps] = useState<number[]>([]);
   const { plan, tasks, markTaskComplete } = useLearningPlan();
   const { incrementExercise } = useTaskProgress();
+  const t = useTranslation();
 
   // Get current task to determine topic
   const currentTask = tasks.find(t => {
@@ -105,7 +107,7 @@ const Exercise = () => {
           if (newCount >= 4) {
             setIsCompleting(true);
             await markTaskComplete(todayTask.id);
-            toast.success("Task completed! Great work!");
+            toast.success(t.taskCompleted);
             return;
           }
         } catch (error) {
@@ -137,14 +139,14 @@ const Exercise = () => {
               onClick={() => navigate('/')}
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Home
+              {t.backToHome}
             </Button>
             <Button 
               variant="outline" 
               onClick={() => navigate('/learn?review=true')}
             >
               <BookOpen className="h-4 w-4 mr-2" />
-              Back to Theory
+              {t.backToTheory}
             </Button>
           </div>
 
@@ -155,40 +157,40 @@ const Exercise = () => {
                   <PartyPopper className="h-20 w-20 text-primary animate-bounce" />
                 </div>
                 <div>
-                  <h2 className="text-3xl font-bold mb-2">Excellent Work!</h2>
+                  <h2 className="text-3xl font-bold mb-2">{t.excellentWork}</h2>
                   <p className="text-muted-foreground text-lg">
-                    You've completed all 4 exercises.
+                    {t.completedAllExercises}
                   </p>
                 </div>
                 <Badge variant="secondary" className="text-lg px-4 py-2">
-                  {completedCount}/4 Exercises Completed ✓
+                  {completedCount}/4 {t.exercisesCompleted} ✓
                 </Badge>
                 <div className="flex flex-col gap-3 max-w-sm mx-auto pt-4">
                   {getNextTask() && (
                     <Button onClick={handleKeepLearning} size="lg" className="w-full">
-                      Keep Learning
+                      {t.keepLearning}
                       <ChevronRight className="h-4 w-4 ml-2" />
                     </Button>
                   )}
                   <Button onClick={() => navigate('/')} variant="outline" size="lg" className="w-full">
                     <ArrowLeft className="h-4 w-4 mr-2" />
-                    Back to Home
+                    {t.backToHome}
                   </Button>
                 </div>
               </div>
             ) : (
               <>
                 <div className="mb-6">
-                  <h2 className="text-3xl font-bold mb-2">Practice Exercises</h2>
+                  <h2 className="text-3xl font-bold mb-2">{t.practiceExercises}</h2>
                   <p className="text-muted-foreground">
-                    Solve these problems to reinforce your understanding
+                    {t.solveProblems}
                   </p>
                   <div className="flex items-center gap-2 mt-4">
                     <Badge variant="secondary">
-                      Problem {currentProblemIndex + 1} of {sampleProblems.length}
+                      {t.problemOf} {currentProblemIndex + 1} {t.of} {sampleProblems.length}
                     </Badge>
                     <Badge variant="outline">
-                      Completed: {completedCount}/4
+                      {t.completedExercises} {completedCount}/4
                     </Badge>
                   </div>
                 </div>
@@ -209,20 +211,20 @@ const Exercise = () => {
                     className="gap-2"
                   >
                     <Lightbulb className="h-4 w-4" />
-                    {showHint ? "Hide Hint" : "Show Hint"}
+                    {showHint ? t.hideHint : t.showHint}
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => setShowSolution(!showSolution)}
                   >
-                    {showSolution ? "Hide Solution" : "Show Solution"}
+                    {showSolution ? t.hideSolution : t.showSolution}
                   </Button>
                 </div>
 
                 {showHint && (
                   <Card className="p-4 bg-primary/5 border-primary/20 mb-4">
-                    <p className="text-sm font-semibold text-primary mb-1">Hint:</p>
+                    <p className="text-sm font-semibold text-primary mb-1">{t.hint}</p>
                     <p className="text-sm">{currentProblem.hint}</p>
                   </Card>
                 )}
@@ -230,8 +232,8 @@ const Exercise = () => {
                 {showSolution && (
                   <>
                     <Card className="p-4 bg-secondary/10 border-secondary/20 mb-4">
-                      <p className="text-sm font-semibold mb-3">Detailed Solution:</p>
-                      <p className="text-xs text-muted-foreground mb-4">Click any steps you got wrong to mark them as mistakes</p>
+                      <p className="text-sm font-semibold mb-3">{t.detailedSolution}</p>
+                      <p className="text-xs text-muted-foreground mb-4">{t.clickStepsToMark}</p>
                       <div className="space-y-3">
                         {currentProblem.detailedSolution.map((step, idx) => {
                           const isSelected = selectedIncorrectSteps.includes(idx);
@@ -276,7 +278,7 @@ const Exercise = () => {
                     </Card>
 
                     <Button onClick={goToNextQuestion} className="w-full" size="lg">
-                      Go to Next Question
+                      {t.goToNextQuestion}
                       <ChevronRight className="h-4 w-4 ml-2" />
                     </Button>
                   </>

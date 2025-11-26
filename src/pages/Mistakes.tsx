@@ -13,11 +13,13 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import "katex/dist/katex.min.css";
 import { mistakeStorage, MistakeRecord } from "@/lib/mistakeStorage";
+import { useTranslation } from "@/translations";
 
 const Mistakes = () => {
   const navigate = useNavigate();
   const [mistakes, setMistakes] = useState<MistakeRecord[]>([]);
   const [topicStats, setTopicStats] = useState<Record<string, number>>({});
+  const t = useTranslation();
 
   const loadMistakes = () => {
     const loadedMistakes = mistakeStorage.getAll();
@@ -89,9 +91,9 @@ const Mistakes = () => {
           <div className="flex items-center justify-between">
             <Button variant="ghost" onClick={() => navigate('/')}>
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {t.back}
             </Button>
-            <h1 className="text-4xl font-bold text-center">CorePus</h1>
+            <h1 className="text-4xl font-bold text-center">{t.appName}</h1>
             <div className="w-[88px]" />
           </div>
 
@@ -99,26 +101,26 @@ const Mistakes = () => {
             <Card>
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-sm font-medium">Total Mistakes</CardTitle>
+                  <CardTitle className="text-sm font-medium">{t.totalMistakes}</CardTitle>
                   <BarChart3 className="h-4 w-4 text-muted-foreground" />
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{mistakes.length}</div>
-                <p className="text-xs text-muted-foreground mt-1">All time</p>
+                <p className="text-xs text-muted-foreground mt-1">{t.allTime}</p>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-sm font-medium">This Week</CardTitle>
+                  <CardTitle className="text-sm font-medium">{t.thisWeek}</CardTitle>
                   <Calendar className="h-4 w-4 text-muted-foreground" />
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{thisWeekMistakes}</div>
-                <p className="text-xs text-muted-foreground mt-1">Last 7 days</p>
+                <p className="text-xs text-muted-foreground mt-1">{t.last7Days}</p>
               </CardContent>
             </Card>
 
