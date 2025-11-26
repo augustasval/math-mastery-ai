@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AlertCircle, TrendingUp, Target, XCircle, ArrowLeft, BarChart3, Calendar, Lightbulb, TrendingDown } from "lucide-react";
+import { format } from "date-fns";
+import { lt } from "date-fns/locale";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -13,13 +15,39 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import "katex/dist/katex.min.css";
 import { mistakeStorage, MistakeRecord } from "@/lib/mistakeStorage";
-import { useTranslation } from "@/translations";
+import { useTranslation, useLanguage } from "@/translations";
 
 const Mistakes = () => {
   const navigate = useNavigate();
   const t = useTranslation();
+  const { language } = useLanguage();
   const [mistakes, setMistakes] = useState<MistakeRecord[]>([]);
   const [topicStats, setTopicStats] = useState<Record<string, number>>({});
+  
+  // Helper to translate topic names
+  const getTopicName = (topicId: string) => {
+    if (topicId === '9-polynomials') return t.topicPolynomials;
+    if (topicId === '9-quadratics') return t.topicQuadratics;
+    return topicId;
+  };
+  
+  // Helper to translate pattern keywords
+  const translateKeyword = (keyword: string) => {
+    const lower = keyword.toLowerCase();
+    if (lower.includes('factor')) return t.patternFactor;
+    if (lower.includes('multiply')) return t.patternMultiply;
+    if (lower.includes('add')) return t.patternAdd;
+    if (lower.includes('subtract')) return t.patternSubtract;
+    return keyword;
+  };
+  
+  // Helper to translate mistake type
+  const getMistakeTypeBadge = (type: string) => {
+    if (type === 'quiz') return t.quiz;
+    if (type === 'exercise') return t.exercise;
+    if (type === 'practice') return t.practice;
+    return type;
+  };
 
   const loadMistakes = () => {
     const loadedMistakes = mistakeStorage.getAll();
@@ -50,7 +78,9 @@ const Mistakes = () => {
   const chartData = mistakeStorage.getDailyMistakeCounts(14);
   
   const mostChallengingTopic = Object.entries(topicStats).sort((a, b) => b[1] - a[1])[0];
-  const mostCommonErrorType = patterns.commonStepKeywords[0]?.keyword || "None detected";
+  const mostCommonErrorType = patterns.commonStepKeywords[0]?.keyword 
+    ? translateKeyword(patterns.commonStepKeywords[0].keyword) 
+    : t.noneDetected;
   
   const quizMistakes = mistakes.filter(m => m.type === 'quiz');
   const exerciseMistakes = mistakes.filter(m => m.type === 'exercise');
@@ -61,25 +91,25 @@ const Mistakes = () => {
   if (patterns.commonStepKeywords.length > 0) {
     const topPattern = patterns.commonStepKeywords[0];
     recommendations.push({
-      text: `Focus on ${topPattern.keyword} techniques - you've struggled with this ${topPattern.count} times`,
+      text: t.recommendationFocus(translateKeyword(topPattern.keyword), topPattern.count),
       icon: Target,
     });
   }
   if (mostChallengingTopic) {
     recommendations.push({
-      text: `Practice more ${mostChallengingTopic[0]} problems - this is your most challenging area`,
+      text: t.recommendationPractice(getTopicName(mostChallengingTopic[0])),
       icon: TrendingUp,
     });
   }
   if (improvementRate.percentChange > 0) {
     recommendations.push({
-      text: `Great progress! You've reduced mistakes by ${improvementRate.percentChange.toFixed(0)}% this week`,
+      text: t.recommendationProgress(Math.round(improvementRate.percentChange)),
       icon: TrendingDown,
     });
   }
   if (daysSinceLastMistake >= 3) {
     recommendations.push({
-      text: `${daysSinceLastMistake} days mistake-free! Keep up the excellent work!`,
+      text: t.recommendationStreak(daysSinceLastMistake),
       icon: Target,
     });
   }
@@ -161,7 +191,7 @@ const Mistakes = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  {mostChallengingTopic ? mostChallengingTopic[0] : "None"}
+                  {mostChallengingTopic ? getTopicName(mostChallengingTopic[0]) : t.noneDetected}
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">{t.needsPractice}</p>
               </CardContent>
@@ -196,9 +226,9 @@ const Mistakes = () => {
                       {pattern.count}
                     </Badge>
                     <div>
-                      <p className="font-medium capitalize">{pattern.keyword} Steps</p>
+                      <p className="font-medium">{translateKeyword(pattern.keyword)} {t.patternSteps}</p>
                       <p className="text-sm text-muted-foreground">
-                        {((pattern.count / exerciseMistakes.length) * 100).toFixed(0)}% of exercise {t.mistakes}
+                        {((pattern.count / exerciseMistakes.length) * 100).toFixed(0)}% {t.ofExercise}
                       </p>
                     </div>
                   </div>
@@ -216,15 +246,15 @@ const Mistakes = () => {
                 <ChartContainer
                   config={{
                     quiz: {
-                      label: "Quiz",
+                      label: t.quiz,
                       color: "hsl(var(--destructive))",
                     },
                     exercise: {
-                      label: "Exercise",
+                      label: t.exercise,
                       color: "hsl(var(--primary))",
                     },
                     practice: {
-                      label: "Practice",
+                      label: t.practice,
                       color: "hsl(var(--secondary))",
                     },
                   }}
@@ -235,7 +265,7 @@ const Mistakes = () => {
                       <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
                       <XAxis
                         dataKey="date"
-                        tickFormatter={(date) => new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                        tickFormatter={(date) => format(new Date(date), 'MMM d', { locale: language === 'lt' ? lt : undefined })}
                         className="text-xs"
                       />
                       <YAxis className="text-xs" />
@@ -264,7 +294,7 @@ const Mistakes = () => {
                   .map(([topic, count]) => (
                     <div key={topic} className="space-y-2">
                       <div className="flex justify-between text-sm">
-                        <span className="font-medium">{topic}</span>
+                        <span className="font-medium">{getTopicName(topic)}</span>
                         <span className="text-muted-foreground">
                           {count} {t.mistakes} ({((count / mistakes.length) * 100).toFixed(0)}%)
                         </span>
@@ -322,12 +352,27 @@ const Mistakes = () => {
 
 const MistakeCard = ({ mistake, onDelete }: { mistake: MistakeRecord; onDelete: (id: string) => void }) => {
   const t = useTranslation();
+  const { language } = useLanguage();
+  
   const getBadgeVariant = (type: MistakeRecord['type']) => {
     switch (type) {
       case 'quiz': return 'destructive';
       case 'exercise': return 'default';
       case 'practice': return 'secondary';
     }
+  };
+  
+  const getMistakeTypeBadge = (type: string) => {
+    if (type === 'quiz') return t.quiz;
+    if (type === 'exercise') return t.exercise;
+    if (type === 'practice') return t.practice;
+    return type;
+  };
+  
+  const getTopicName = (topicId: string) => {
+    if (topicId === '9-polynomials') return t.topicPolynomials;
+    if (topicId === '9-quadratics') return t.topicQuadratics;
+    return topicId;
   };
 
   const getTimeAgo = (date: string) => {
@@ -346,8 +391,8 @@ const MistakeCard = ({ mistake, onDelete }: { mistake: MistakeRecord; onDelete: 
     <Card className="p-4 bg-accent/5 border-accent">
       <div className="flex justify-between items-start mb-3">
         <div className="flex gap-2 flex-wrap">
-          <Badge variant={getBadgeVariant(mistake.type)}>{mistake.type}</Badge>
-          <Badge variant="outline">{mistake.topic}</Badge>
+          <Badge variant={getBadgeVariant(mistake.type)}>{getMistakeTypeBadge(mistake.type)}</Badge>
+          <Badge variant="outline">{getTopicName(mistake.topic)}</Badge>
           <Badge variant="secondary" className="text-xs">{getTimeAgo(mistake.date)}</Badge>
         </div>
         <Button

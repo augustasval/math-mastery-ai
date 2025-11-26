@@ -10,16 +10,42 @@ import { useLearningPlan } from "@/hooks/useLearningPlan";
 import { useNavigate } from "react-router-dom";
 import { CheckCircle2, Circle, Calendar, BookOpen, Target, Loader2, Settings, AlertCircle } from "lucide-react";
 import { format, differenceInDays, parseISO, isToday, isPast } from "date-fns";
+import { lt } from "date-fns/locale";
 import { supabase } from "@/integrations/supabase/client";
 import { SessionManager } from "@/lib/sessionManager";
 import { toast } from "sonner";
-import { useTranslation } from "@/translations";
+import { useTranslation, useLanguage } from "@/translations";
 
 const Home = () => {
   const navigate = useNavigate();
   const { plan, tasks, loading, markTaskComplete, refetch } = useLearningPlan();
   const [showOnboarding, setShowOnboarding] = useState(false);
   const t = useTranslation();
+  const { language } = useLanguage();
+  
+  // Helper to get topic name translation
+  const getTopicName = (topicId: string) => {
+    if (topicId === '9-polynomials') return t.topicPolynomials;
+    if (topicId === '9-quadratics') return t.topicQuadratics;
+    return topicId;
+  };
+  
+  // Helper to get task type badge
+  const getTaskTypeBadge = (taskType: string) => {
+    switch (taskType) {
+      case 'theory': return t.taskTypeTheory;
+      case 'practice': return t.taskTypePractice;
+      case 'review': return t.taskTypeReview;
+      case 'quiz': return t.taskTypeQuiz;
+      default: return taskType;
+    }
+  };
+  
+  // Helper for date formatting
+  const formatDate = (dateStr: string, formatStr: string = 'MMM d') => {
+    const date = parseISO(dateStr);
+    return format(date, formatStr, { locale: language === 'lt' ? lt : undefined });
+  };
 
   useEffect(() => {
     // Show onboarding if no plan exists
@@ -139,7 +165,7 @@ const Home = () => {
           <Card className="p-6 border-primary/20">
             <div className="flex items-start justify-between mb-4">
               <div>
-                <h2 className="text-2xl font-bold">{plan.topic_name}</h2>
+                <h2 className="text-2xl font-bold">{getTopicName(plan.topic_id)}</h2>
                 <p className="text-sm text-muted-foreground">
                   {t.grade} {plan.grade}
                 </p>
@@ -192,7 +218,7 @@ const Home = () => {
                           <p className="text-sm text-muted-foreground mt-1">{task.description}</p>
                         </div>
                         <Badge variant="outline" className="shrink-0">
-                          {task.task_type}
+                          {getTaskTypeBadge(task.task_type)}
                         </Badge>
                       </div>
                     </div>
@@ -230,13 +256,13 @@ const Home = () => {
                               {task.title}
                             </p>
                             <p className="text-xs text-muted-foreground mt-1">
-                              {format(parseISO(task.scheduled_date), 'MMM d')}
+                              {formatDate(task.scheduled_date)}
                             </p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2 shrink-0">
                           <Badge variant="outline" className="text-xs">
-                            {task.task_type}
+                            {getTaskTypeBadge(task.task_type)}
                           </Badge>
                           {task.is_completed ? (
                             <Badge variant="outline" className="bg-green-500/10 text-green-700 dark:text-green-400 border-green-500/30 text-xs">
@@ -278,13 +304,13 @@ const Home = () => {
                           <div className="flex-1 min-w-0">
                             <p className="font-medium text-muted-foreground">{task.title}</p>
                             <p className="text-xs text-muted-foreground mt-1">
-                              {format(parseISO(task.scheduled_date), 'EEE, MMM d')}
+                              {formatDate(task.scheduled_date, 'EEE, MMM d')}
                             </p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2 shrink-0">
                           <Badge variant="outline" className="text-xs">
-                            {task.task_type}
+                            {getTaskTypeBadge(task.task_type)}
                           </Badge>
                           <Button 
                             size="sm" 
