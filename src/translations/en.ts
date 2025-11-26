@@ -239,4 +239,36 @@ export const en = {
   personalizedPlanReady: (days: number) => `Your personalized ${days}-day study plan is ready.`,
   errorCreatingPlan: "Error creating plan",
   errorTryAgain: (error: string) => `${error}. Please try again or contact support if the problem persists.`,
+  
+  // Task types
+  taskTypeTheory: "Theory",
+  taskTypePractice: "Practice",
+  taskTypeReview: "Review",
+  taskTypeQuiz: "Quiz",
+  
+  // Pattern keywords
+  patternFactor: "Factor",
+  patternMultiply: "Multiply",
+  patternAdd: "Add",
+  patternSubtract: "Subtract",
+  patternSteps: "Steps",
+  noneDetected: "None detected",
+  ofExercise: "of exercise",
+  
+  // Topic names
+  topicPolynomials: "Polynomials",
+  topicQuadratics: "Quadratic Equations",
+  
+  // Recommendations
+  recommendationFocus: (keyword: string, count: number) => `Focus on ${keyword} techniques - you've struggled with this ${count} times`,
+  recommendationPractice: (topic: string) => `Practice more ${topic} problems - this is your most challenging area`,
+  recommendationProgress: (percent: number) => `Great progress! You've reduced mistakes by ${percent}% this week`,
+  recommendationStreak: (days: number) => `${days} days mistake-free! Keep up the excellent work!`,
+  
+  // Task descriptions  
+  taskDescriptionTheory: (topic: string) => `Study the theory and concepts related to ${topic}`,
+  taskDescriptionPractice: (topic: string) => `Complete practice problems on ${topic}`,
+  existingPlanError: "You already have a learning plan. Delete it first to create a new one.",
+  fallbackPlanNotice: "Failed to generate plan. Using backup plan.",
+  mistakeSaved: "Mistake saved for review",
 };

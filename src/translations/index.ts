@@ -8,3 +8,5 @@ export const useTranslation = () => {
   const { language } = useLanguage();
   return translations[language];
 };
+
+export { useLanguage };
