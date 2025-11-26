@@ -18,6 +18,7 @@ import { useLearningPlan } from "@/hooks/useLearningPlan";
 import { useTaskProgress } from "@/hooks/useTaskProgress";
 import { SessionManager } from "@/lib/sessionManager";
 import { lessons, type Lesson, type LessonStep, type QuizQuestion } from "@/data";
+import { useTranslation } from "@/translations";
 
 
 const StepByStep = () => {
@@ -30,6 +31,7 @@ const StepByStep = () => {
   const [isGeneratingQuiz, setIsGeneratingQuiz] = useState(false);
   const { plan, tasks } = useLearningPlan();
   const { markQuizPassed } = useTaskProgress();
+  const t = useTranslation();
 
   useEffect(() => {
     // Check if in review mode (from "Back to Theory" button)
@@ -141,7 +143,7 @@ const StepByStep = () => {
             className="self-start"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Home
+            {t.backToHome}
           </Button>
 
           <Card className="p-6">
@@ -150,7 +152,7 @@ const StepByStep = () => {
               <p className="text-muted-foreground">{currentLesson.introduction}</p>
               <div className="flex items-center gap-2 mt-4">
                 <Badge variant="secondary">
-                  Step {currentStep + 1} of {totalSteps}
+                  {t.stepOf} {currentStep + 1} {t.of} {totalSteps}
                 </Badge>
                 <div className="flex-1 bg-muted rounded-full h-2">
                   <div
@@ -180,7 +182,7 @@ const StepByStep = () => {
                   {currentLesson.steps[currentStep].example && (
                     <Card className="p-4 bg-primary/5 border-primary/20 mb-4">
                       <div className="flex items-center justify-between mb-2">
-                        <p className="text-sm font-semibold text-primary">Example:</p>
+                        <p className="text-sm font-semibold text-primary">{t.example}</p>
                         <StepQuestionDialog
                           stepContent={currentLesson.steps[currentStep].title}
                           stepExplanation={currentLesson.steps[currentStep].explanation}
@@ -199,7 +201,7 @@ const StepByStep = () => {
 
                   {currentLesson.steps[currentStep].tip && (
                     <Card className="p-4 bg-secondary/10 border-secondary/20">
-                      <p className="text-sm font-semibold mb-1">Pro Tip</p>
+                      <p className="text-sm font-semibold mb-1">{t.proTip}</p>
                       <p className="text-sm">{currentLesson.steps[currentStep].tip}</p>
                     </Card>
                   )}
@@ -211,17 +213,17 @@ const StepByStep = () => {
                     onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
                     disabled={currentStep === 0}
                   >
-                    Previous Step
+                    {t.previousStep}
                   </Button>
                   {isLastStep ? (
                     <Button onClick={startQuiz}>
-                      Start Quiz
+                      {t.startQuiz}
                     </Button>
                   ) : (
                     <Button
                       onClick={() => setCurrentStep(Math.min(totalSteps - 1, currentStep + 1))}
                     >
-                      Next Step
+                      {t.nextStep}
                     </Button>
                   )}
                 </div>
