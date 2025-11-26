@@ -9,6 +9,7 @@ import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import "katex/dist/katex.min.css";
+import { useTranslation } from "@/translations";
 
 interface Problem {
   id: string;
@@ -27,6 +28,7 @@ export const PracticeProblems = ({ difficulty }: PracticeProblemsProps) => {
   const [userAnswers, setUserAnswers] = useState<Record<string, string>>({});
   const [showHints, setShowHints] = useState<Record<string, boolean>>({});
   const [checkedAnswers, setCheckedAnswers] = useState<Record<string, boolean>>({});
+  const t = useTranslation();
 
   function generateProblems(level: "easy" | "medium" | "hard"): Problem[] {
     const problemSets = {
@@ -119,14 +121,14 @@ export const PracticeProblems = ({ difficulty }: PracticeProblemsProps) => {
     if (userAnswer === correctAnswer) {
       setCheckedAnswers((prev) => ({ ...prev, [problem.id]: true }));
       toast({
-        title: "Correct! 🎉",
-        description: "Great job! You got it right.",
+        title: t.correctCelebration,
+        description: t.greatJob,
       });
     } else {
       setCheckedAnswers((prev) => ({ ...prev, [problem.id]: false }));
       toast({
-        title: "Not quite right",
-        description: "Review the hint and try again, or check the explanation.",
+        title: t.notQuiteRight,
+        description: t.reviewHint,
         variant: "destructive",
       });
     }
@@ -138,8 +140,8 @@ export const PracticeProblems = ({ difficulty }: PracticeProblemsProps) => {
     setShowHints({});
     setCheckedAnswers({});
     toast({
-      title: "New problems generated!",
-      description: `Generated ${difficulty} level practice problems.`,
+      title: t.newProblemsGenerated,
+      description: t.generatedProblems(difficulty),
     });
   };
 
@@ -147,14 +149,14 @@ export const PracticeProblems = ({ difficulty }: PracticeProblemsProps) => {
     <Card className="p-6">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h2 className="text-2xl font-bold">Practice Problems</h2>
+          <h2 className="text-2xl font-bold">{t.problemsComponent}</h2>
           <p className="text-sm text-muted-foreground">
-            Difficulty: <Badge variant="secondary">{difficulty}</Badge>
+            {t.difficulty} <Badge variant="secondary">{difficulty}</Badge>
           </p>
         </div>
         <Button onClick={regenerateProblems} variant="outline" size="sm">
           <RefreshCw className="h-4 w-4 mr-2" />
-          New Problems
+          {t.newProblems}
         </Button>
       </div>
 
@@ -175,13 +177,13 @@ export const PracticeProblems = ({ difficulty }: PracticeProblemsProps) => {
 
               <div className="flex gap-2">
                 <Input
-                  placeholder="Your answer..."
+                  placeholder={t.yourAnswerPlaceholder}
                   value={userAnswers[problem.id] || ""}
                   onChange={(e) => handleAnswerChange(problem.id, e.target.value)}
                   className="flex-1"
                 />
                 <Button onClick={() => checkAnswer(problem)} variant="default">
-                  Check
+                  {t.check}
                 </Button>
                 <Button onClick={() => toggleHint(problem.id)} variant="outline" size="icon">
                   <Lightbulb className="h-4 w-4" />
@@ -195,12 +197,12 @@ export const PracticeProblems = ({ difficulty }: PracticeProblemsProps) => {
                   {checkedAnswers[problem.id] ? (
                     <>
                       <CheckCircle className="h-4 w-4" />
-                      <span>Correct!</span>
+                      <span>{t.correct}</span>
                     </>
                   ) : (
                     <>
                       <XCircle className="h-4 w-4" />
-                      <span>Incorrect - Try again or check the hint</span>
+                      <span>{t.incorrectTryAgain}</span>
                     </>
                   )}
                 </div>
@@ -211,13 +213,13 @@ export const PracticeProblems = ({ difficulty }: PracticeProblemsProps) => {
                   <div className="flex items-start gap-2">
                     <Lightbulb className="h-4 w-4 text-primary mt-1" />
                     <div className="flex-1">
-                      <p className="text-sm font-semibold text-primary mb-1">Hint:</p>
+                      <p className="text-sm font-semibold text-primary mb-1">{t.hint}</p>
                       <p className="text-sm text-foreground">{problem.hint}</p>
                     </div>
                   </div>
                   {checkedAnswers[problem.id] === false && (
                     <div className="mt-3 pt-3 border-t border-border">
-                      <p className="text-sm font-semibold mb-2">Explanation:</p>
+                      <p className="text-sm font-semibold mb-2">{t.explanation}</p>
                       <div className="prose prose-sm dark:prose-invert">
                         <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
                           {problem.explanation}

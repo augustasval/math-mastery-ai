@@ -325,8 +325,8 @@ export const OnboardingModal = ({ open, onComplete, existingPlan, onClose }: Onb
           // First-time user somehow has a plan - just redirect
           console.log('Plan already exists for this session, proceeding to home');
           toast({
-            title: "Plan already exists!",
-            description: "You already have a learning plan. Taking you to your dashboard.",
+            title: t.planAlreadyExists,
+            description: t.planExistsMessage,
           });
           onComplete();
           return;
@@ -411,8 +411,8 @@ export const OnboardingModal = ({ open, onComplete, existingPlan, onClose }: Onb
       window.history.replaceState({}, '', url.toString());
 
       toast({
-        title: "Learning plan created!",
-        description: `Your personalized ${result.taskCount}-day study plan is ready.`,
+        title: t.learningPlanCreated,
+        description: t.personalizedPlanReady(result.taskCount),
       });
 
       // Wait a moment to ensure database operations are committed
@@ -426,8 +426,8 @@ export const OnboardingModal = ({ open, onComplete, existingPlan, onClose }: Onb
       console.error('Error generating plan:', error);
       const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
       toast({
-        title: "Error creating plan",
-        description: `${errorMessage}. Please try again or contact support if the problem persists.`,
+        title: t.errorCreatingPlan,
+        description: t.errorTryAgain(errorMessage),
         variant: "destructive",
       });
     } finally {
