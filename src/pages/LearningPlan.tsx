@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
+import { useTranslation } from "@/translations";
 
 interface StudyTask {
   day: number;
@@ -23,6 +24,7 @@ const LearningPlan = () => {
   const [selectedTopic, setSelectedTopic] = useState("9-quadratics");
   const [testDate, setTestDate] = useState<Date>();
   const [studyPlan, setStudyPlan] = useState<StudyTask[]>([]);
+  const t = useTranslation();
 
   const generateStudyPlan = () => {
     if (!testDate) {

@@ -18,6 +18,7 @@ import "katex/dist/katex.min.css";
 import { MathGraph } from "./MathGraph";
 import { TheoryQuiz } from "./TheoryQuiz";
 import { supabase } from "@/integrations/supabase/client";
+import { useTranslation } from "@/translations";
 
 interface Message {
   role: "user" | "assistant";
@@ -54,6 +55,7 @@ export const StepQuestionDialog = ({
   const [isGeneratingQuiz, setIsGeneratingQuiz] = useState(false);
   const [canShowQuiz, setCanShowQuiz] = useState(false);
   const { toast: toastHook } = useToast();
+  const t = useTranslation();
 
   // Check if the last message context supports visual generation and quiz
   useEffect(() => {
@@ -94,13 +96,13 @@ export const StepQuestionDialog = ({
       if (data?.questions && data.questions.length > 0) {
         setQuizQuestions(data.questions);
         setShowQuiz(true);
-        toast.success("Quiz generated!");
+        toast.success(t.quizGenerated);
       } else {
-        toast.error("Failed to generate quiz questions");
+        toast.error(t.failedToGenerateQuiz);
       }
     } catch (error) {
       console.error("Error generating quiz:", error);
-      toast.error("Failed to generate quiz");
+      toast.error(t.failedToGenerateQuiz);
     } finally {
       setIsGeneratingQuiz(false);
     }
@@ -108,7 +110,7 @@ export const StepQuestionDialog = ({
 
   const handleQuizComplete = (score: number) => {
     const percentage = Math.round((score / quizQuestions.length) * 100);
-    toast.success(`Quiz complete! You scored ${score}/${quizQuestions.length} (${percentage}%)`);
+    toast.success(`${t.quizComplete} ${score}/${quizQuestions.length} (${percentage}%)`);
   };
 
   const handleReadTheory = () => {
@@ -161,7 +163,7 @@ export const StepQuestionDialog = ({
           ...prev,
           {
             role: "assistant",
-            content: "Here's a visual representation to help you understand:",
+            content: t.visualRepresentation,
             graphData: data.graphData,
           },
         ]);
@@ -170,7 +172,7 @@ export const StepQuestionDialog = ({
       console.error("Error generating graph:", error);
       toastHook({
         title: "Error",
-        description: "Failed to generate graph. Please try again.",
+        description: t.errorGettingResponse,
         variant: "destructive",
       });
     } finally {
@@ -181,7 +183,7 @@ export const StepQuestionDialog = ({
   const askQuestion = async () => {
     if (!question.trim()) {
       toastHook({
-        title: "Please enter a question",
+        title: t.pleaseEnterQuestion,
         variant: "destructive",
       });
       return;
@@ -266,7 +268,7 @@ export const StepQuestionDialog = ({
       console.error("Error asking question:", error);
       toastHook({
         title: "Error",
-        description: "Failed to get AI response. Please try again.",
+        description: t.errorGettingResponse,
         variant: "destructive",
       });
     } finally {
@@ -282,23 +284,23 @@ export const StepQuestionDialog = ({
         onClick={() => setOpen(true)}
       >
         <MessageCircle className="w-4 h-4 mr-1" />
-        Ask AI
+        {t.askAI}
       </Button>
 
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetContent side="right" className="w-full sm:max-w-xl flex flex-col h-full p-0">
           <div className="p-6 border-b border-border">
             <SheetHeader>
-              <SheetTitle>Ask About This Step</SheetTitle>
+              <SheetTitle>{t.askAboutThisStep}</SheetTitle>
               <SheetDescription>
-                Have a question about this step? Ask the AI tutor for help!
+                {t.askAboutTheoryDescription}
               </SheetDescription>
             </SheetHeader>
           </div>
 
           <div className="flex-1 overflow-y-auto p-6 space-y-4">
             <div className="p-4 bg-secondary/30 rounded-lg">
-              <p className="text-sm font-medium mb-2">Step Context:</p>
+              <p className="text-sm font-medium mb-2">{t.stepContext}</p>
               <div className="prose prose-sm dark:prose-invert">
                 <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
                   {stepContent}
@@ -306,7 +308,7 @@ export const StepQuestionDialog = ({
               </div>
               {stepExample && (
                 <div className="mt-3 pt-3 border-t border-border">
-                  <p className="text-sm font-medium mb-1">Example:</p>
+                  <p className="text-sm font-medium mb-1">{t.example}</p>
                   <div className="prose prose-sm dark:prose-invert">
                     <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
                       {stepExample}
@@ -326,7 +328,7 @@ export const StepQuestionDialog = ({
                 }`}
               >
                 <p className="text-xs font-semibold mb-2 text-muted-foreground">
-                  {message.role === "user" ? "You" : "AI Tutor"}
+                  {message.role === "user" ? t.you : t.aiTutor}
                 </p>
                 <div className="prose prose-sm dark:prose-invert max-w-none">
                   <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
@@ -348,7 +350,7 @@ export const StepQuestionDialog = ({
             {isLoading && (
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Loader2 className="w-4 h-4 animate-spin" />
-                <span className="text-sm">AI Tutor is thinking...</span>
+                <span className="text-sm">{t.aiThinking}</span>
               </div>
             )}
           </div>
@@ -362,14 +364,14 @@ export const StepQuestionDialog = ({
                 disabled={isLoading}
               >
                 <Image className="w-4 h-4 mr-2" />
-                Generate Interactive Graph
+                {t.generateInteractiveGraph}
               </Button>
             )}
             
             {isGeneratingImage && (
               <div className="flex items-center justify-center gap-2 text-muted-foreground p-3 bg-secondary/20 rounded-lg">
                 <Loader2 className="w-4 h-4 animate-spin" />
-                <span className="text-sm">Creating visual example...</span>
+                <span className="text-sm">{t.creatingVisualExample}</span>
               </div>
             )}
 
@@ -383,10 +385,10 @@ export const StepQuestionDialog = ({
                 {isGeneratingQuiz ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Generating Quiz...
+                    {t.generatingQuiz}
                   </>
                 ) : (
-                  "Take Quiz on Theory"
+                  t.takeQuizOnTheory
                 )}
               </Button>
             )}
@@ -412,7 +414,7 @@ export const StepQuestionDialog = ({
                     askQuestion();
                   }
                 }}
-                placeholder="Ask a question about this step..."
+                placeholder={t.askQuestionPlaceholder}
                 className="min-h-[60px] resize-none"
                 disabled={isLoading}
               />

@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Play, BookOpen } from "lucide-react";
 import { GradeTopicSelector, curriculumTopics } from "@/components/GradeTopicSelector";
+import { useTranslation } from "@/translations";
 
 interface TranscriptSegment {
   timestamp: string;
@@ -80,6 +81,7 @@ export default function VideoLibrary() {
   const [selectedTopic, setSelectedTopic] = useState("9-quadratics");
   const [currentVideo, setCurrentVideo] = useState<VideoLesson | null>(null);
   const [videoPlayer, setVideoPlayer] = useState<any>(null);
+  const t = useTranslation();
 
   const videos = videoLibrary[selectedTopic] || [];
 

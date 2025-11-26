@@ -14,6 +14,7 @@ import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import "katex/dist/katex.min.css";
+import { useTranslation } from "@/translations";
 
 interface Message {
   role: "user" | "assistant";
@@ -40,11 +41,12 @@ export const ExerciseSolutionQuestion = ({
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const t = useTranslation();
 
   const askQuestion = async () => {
     if (!question.trim()) {
       toast({
-        title: "Please enter a question",
+        title: t.pleaseEnterQuestion,
         variant: "destructive",
       });
       return;
@@ -129,7 +131,7 @@ export const ExerciseSolutionQuestion = ({
       console.error("Error asking question:", error);
       toast({
         title: "Error",
-        description: "Failed to get AI response. Please try again.",
+        description: t.errorGettingResponse,
         variant: "destructive",
       });
     } finally {
@@ -146,30 +148,30 @@ export const ExerciseSolutionQuestion = ({
         className="h-6 px-2 text-xs"
       >
         <MessageCircle className="w-3 h-3 mr-1" />
-        Ask AI
+        {t.askAI}
       </Button>
 
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetContent side="right" className="w-full sm:max-w-xl flex flex-col h-full p-0">
           <div className="p-6 border-b border-border">
             <SheetHeader>
-              <SheetTitle>Ask About This Step</SheetTitle>
+              <SheetTitle>{t.askAboutThisStep}</SheetTitle>
               <SheetDescription>
-                Have a question about this solution step? Ask the AI tutor for help!
+                {t.askAboutStepDescription}
               </SheetDescription>
             </SheetHeader>
           </div>
 
           <div className="flex-1 overflow-y-auto p-6 space-y-4">
             <div className="p-4 bg-secondary/30 rounded-lg">
-              <p className="text-sm font-medium mb-2">Problem:</p>
+              <p className="text-sm font-medium mb-2">{t.problem}</p>
               <div className="prose prose-sm dark:prose-invert">
                 <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
                   {problemQuestion}
                 </ReactMarkdown>
               </div>
               <div className="mt-3 pt-3 border-t border-border">
-                <p className="text-sm font-medium mb-2">Current Step:</p>
+                <p className="text-sm font-medium mb-2">{t.currentStep}</p>
                 <div className="prose prose-sm dark:prose-invert">
                   <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
                     {stepContent}
@@ -189,7 +191,7 @@ export const ExerciseSolutionQuestion = ({
                 }`}
               >
                 <p className="text-xs font-semibold mb-2 text-muted-foreground">
-                  {message.role === "user" ? "You" : "AI Tutor"}
+                  {message.role === "user" ? t.you : t.aiTutor}
                 </p>
                 <div className="prose prose-sm dark:prose-invert max-w-none">
                   <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
@@ -202,7 +204,7 @@ export const ExerciseSolutionQuestion = ({
             {isLoading && (
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Loader2 className="w-4 h-4 animate-spin" />
-                <span className="text-sm">AI Tutor is thinking...</span>
+                <span className="text-sm">{t.aiThinking}</span>
               </div>
             )}
           </div>
@@ -218,7 +220,7 @@ export const ExerciseSolutionQuestion = ({
                     askQuestion();
                   }
                 }}
-                placeholder="Ask a question about this step..."
+                placeholder={t.askQuestionPlaceholder}
                 className="min-h-[60px] resize-none"
                 disabled={isLoading}
               />
