@@ -1,4 +1,5 @@
 // Data loader utility for curriculum content
+import { useLanguage } from '@/contexts/LanguageContext';
 import polynomialsLesson from './lessons/9-polynomials.json';
 import quadraticsLesson from './lessons/9-quadratics.json';
 import polynomialsExercises from './exercises/9-polynomials.json';

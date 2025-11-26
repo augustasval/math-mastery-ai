@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useTranslation } from "@/translations";
 
 interface DifficultySelectorProps {
   value: "easy" | "medium" | "hard";
@@ -7,9 +8,11 @@ interface DifficultySelectorProps {
 }
 
 export const DifficultySelector = ({ value, onChange }: DifficultySelectorProps) => {
+  const t = useTranslation();
+  
   return (
     <div className="flex items-center gap-2">
-      <span className="text-sm text-muted-foreground">Level:</span>
+      <span className="text-sm text-muted-foreground">{t.level}</span>
       <div className="flex gap-1">
         <Button
           variant={value === "easy" ? "default" : "outline"}
@@ -17,7 +20,7 @@ export const DifficultySelector = ({ value, onChange }: DifficultySelectorProps)
           onClick={() => onChange("easy")}
           className="text-xs"
         >
-          Easy
+          {t.easy}
         </Button>
         <Button
           variant={value === "medium" ? "default" : "outline"}
@@ -25,7 +28,7 @@ export const DifficultySelector = ({ value, onChange }: DifficultySelectorProps)
           onClick={() => onChange("medium")}
           className="text-xs"
         >
-          Medium
+          {t.medium}
         </Button>
         <Button
           variant={value === "hard" ? "default" : "outline"}
@@ -33,7 +36,7 @@ export const DifficultySelector = ({ value, onChange }: DifficultySelectorProps)
           onClick={() => onChange("hard")}
           className="text-xs"
         >
-          Hard
+          {t.hard}
         </Button>
       </div>
     </div>
