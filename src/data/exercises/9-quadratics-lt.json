@@ -1,0 +1,66 @@
+{
+  "topicId": "9-quadratics-lt",
+  "problems": [
+    {
+      "id": "quad1-lt",
+      "question": "Išspręskite išskaidydami: $x^2 + 5x + 6 = 0$",
+      "answer": "-2,-3",
+      "hint": "Raskite du skaičius, kurie sudauginti duoda 6 ir sudėti duoda 5.",
+      "detailedSolution": [
+        { "step": "$x^2 + 5x + 6 = 0$", "explanation": "Kvadratinė lygtis standartine forma" },
+        { "step": "$(x + 2)(x + 3) = 0$", "explanation": "Išskaidykite: reikia dviejų skaičių, kurie sudauginti duoda 6 ir sudėti duoda 5, tai yra 2 ir 3" },
+        { "step": "$x + 2 = 0$ arba $x + 3 = 0$", "explanation": "Naudokite nulinės sandaugos savybę: jei sandauga lygi nuliui, vienas dauginamasis turi būti lygus nuliui" },
+        { "step": "$x = -2$ arba $x = -3$", "explanation": "Išspręskite kiekvieną lygtį: iš pirmos atimkite 2, iš antros atimkite 3" }
+      ]
+    },
+    {
+      "id": "quad2-lt",
+      "question": "Išspręskite naudodami kvadratinę formulę: $x^2 - 4x + 3 = 0$",
+      "answer": "1,3",
+      "hint": "Naudokite $x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$ su $a=1, b=-4, c=3$",
+      "detailedSolution": [
+        { "step": "Nustatykite: $a=1, b=-4, c=3$", "explanation": "Koeficientai iš standartinės formos $ax^2 + bx + c = 0$" },
+        { "step": "$\\Delta = (-4)^2 - 4(1)(3) = 16 - 12 = 4$", "explanation": "Apskaičiuokite diskriminantą, kad patikrintumėte, ar yra realūs sprendiniai" },
+        { "step": "$x = \\frac{-(-4) \\pm \\sqrt{4}}{2(1)} = \\frac{4 \\pm 2}{2}$", "explanation": "Įstatykite į kvadratinę formulę" },
+        { "step": "$x = \\frac{4 + 2}{2} = 3$ arba $x = \\frac{4 - 2}{2} = 1$", "explanation": "Įvertinkite abu sprendinius iš $\\pm$" }
+      ]
+    },
+    {
+      "id": "quad3-lt",
+      "question": "Išskaidykite visiškai: $2x^2 + 7x + 3$",
+      "answer": "(2x + 1)(x + 3)",
+      "hint": "Ieškokite $2 \\times 3 = 6$ daliklių, kurie sudėti duoda 7.",
+      "detailedSolution": [
+        { "step": "$2x^2 + 7x + 3$", "explanation": "Kvadratas su pirmuoju koeficientu nelygiu 1" },
+        { "step": "Raskite $2 \\times 3 = 6$ daugiklius, kurie sudėti duoda 7: 6 ir 1", "explanation": "Naudokite AC metodą: padauginkite $a$ ir $c$, raskite daugiklius, kurie sudėti duoda $b$" },
+        { "step": "$2x^2 + 6x + x + 3$", "explanation": "Padalinkite vidurinį narį: $7x = 6x + x$" },
+        { "step": "$2x(x + 3) + 1(x + 3) = (2x + 1)(x + 3)$", "explanation": "Išskaidykite grupuojant: iškelkite bendrus daugiklius iš porų" }
+      ]
+    },
+    {
+      "id": "quad4-lt",
+      "question": "Užbaikite kvadratą: $x^2 + 6x = 7$",
+      "answer": "1,-7",
+      "hint": "Pridėkite $(\\frac{6}{2})^2$ prie abiejų pusių.",
+      "detailedSolution": [
+        { "step": "$x^2 + 6x = 7$", "explanation": "Lygtis ne standartine forma, konstanta dešinėje pusėje" },
+        { "step": "$x^2 + 6x + 9 = 7 + 9$", "explanation": "Užbaikite kvadratą: pridėkite $(\\frac{b}{2})^2 = (\\frac{6}{2})^2 = 9$ prie abiejų pusių" },
+        { "step": "$(x + 3)^2 = 16$", "explanation": "Kairė pusė yra pilnas kvadratas: $(x + 3)^2$. Dešinė pusė: $7 + 9 = 16$" },
+        { "step": "$x + 3 = \\pm 4$", "explanation": "Ištraukite kvadratinę šaknį iš abiejų pusių (neužmirškite $\\pm$)" },
+        { "step": "$x = -3 + 4 = 1$ arba $x = -3 - 4 = -7$", "explanation": "Išspręskite $x$: atimkite 3 iš abiejų atvejų" }
+      ]
+    },
+    {
+      "id": "quad5-lt",
+      "question": "Raskite lygties $2x^2 - 3x - 5 = 0$ diskriminantą",
+      "answer": "49",
+      "hint": "Naudokite formulę $\\Delta = b^2 - 4ac$",
+      "detailedSolution": [
+        { "step": "Nustatykite: $a=2, b=-3, c=-5$", "explanation": "Ištraukite koeficientus iš standartinės formos" },
+        { "step": "$\\Delta = b^2 - 4ac$", "explanation": "Diskriminanto formulė" },
+        { "step": "$\\Delta = (-3)^2 - 4(2)(-5)$", "explanation": "Įstatykite reikšmes į formulę" },
+        { "step": "$\\Delta = 9 - (-40) = 9 + 40 = 49$", "explanation": "Apskaičiuokite: du minusai padaro pliusą" }
+      ]
+    }
+  ]
+}

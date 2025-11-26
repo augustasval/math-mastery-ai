@@ -12,23 +12,37 @@ import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import "katex/dist/katex.min.css";
-import { practice, type Problem, type DetailedStep } from "@/data";
+import { useLocalizedContent, type Problem, type DetailedStep } from "@/data";
 import { useLearningPlan } from "@/hooks/useLearningPlan";
 import { useTranslation } from "@/translations";
 
 const Practice = () => {
   const { plan } = useLearningPlan();
   const t = useTranslation();
+  const { getPractice } = useLocalizedContent();
   const [selectedGrade, setSelectedGrade] = useState("9");
   const [selectedTopic, setSelectedTopic] = useState(plan?.topic_id || "9-quadratics");
   const [difficulty, setDifficulty] = useState<"easy" | "medium" | "hard">("medium");
-  const [currentProblem, setCurrentProblem] = useState<Problem>(generateProblem("9-quadratics", difficulty));
+  const [currentProblem, setCurrentProblem] = useState<Problem | null>(null);
   const [userAnswer, setUserAnswer] = useState("");
   const [showHint, setShowHint] = useState(false);
   const [showSolution, setShowSolution] = useState(false);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [attempts, setAttempts] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
+
+  function generateProblem(topicId: string, level: string): Problem {
+    const practiceSet = getPractice(topicId) || getPractice("9-quadratics");
+    const topicProblems = practiceSet?.problems || [];
+    return topicProblems[Math.floor(Math.random() * topicProblems.length)];
+  }
+
+  // Initialize problem on mount
+  useEffect(() => {
+    if (!currentProblem) {
+      setCurrentProblem(generateProblem("9-quadratics", difficulty));
+    }
+  }, []);
 
   // Update topic when plan loads
   useEffect(() => {
@@ -38,13 +52,9 @@ const Practice = () => {
     }
   }, [plan?.topic_id]);
 
-  function generateProblem(topicId: string, level: string): Problem {
-    const practiceSet = practice[topicId] || practice["9-quadratics"];
-    const topicProblems = practiceSet?.problems || [];
-    return topicProblems[Math.floor(Math.random() * topicProblems.length)];
-  }
-
   const checkAnswer = () => {
+    if (!currentProblem) return;
+    
     const userAns = userAnswer.toLowerCase().replace(/\s/g, "");
     const correctAns = currentProblem.answer.toLowerCase().replace(/\s/g, "");
 
@@ -115,7 +125,8 @@ const Practice = () => {
             }}
           />
 
-          <Card className="p-6">
+          {currentProblem && (
+            <Card className="p-6">
             <div className="mb-6">
               <Badge variant="secondary" className="mb-4">
                 Problem #{attempts + 1}
@@ -212,6 +223,7 @@ const Practice = () => {
               )}
             </div>
           </Card>
+          )}
         </div>
         </div>
       </div>

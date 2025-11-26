@@ -1,11 +1,21 @@
 // Data loader utility for curriculum content
 import { useLanguage } from '@/contexts/LanguageContext';
-import polynomialsLesson from './lessons/9-polynomials.json';
-import quadraticsLesson from './lessons/9-quadratics.json';
-import polynomialsExercises from './exercises/9-polynomials.json';
-import quadraticsExercises from './exercises/9-quadratics.json';
-import polynomialsPractice from './practice/9-polynomials.json';
-import quadraticsPractice from './practice/9-quadratics.json';
+
+// Import English content
+import polynomialsLessonEn from './lessons/9-polynomials.json';
+import quadraticsLessonEn from './lessons/9-quadratics.json';
+import polynomialsExercisesEn from './exercises/9-polynomials.json';
+import quadraticsExercisesEn from './exercises/9-quadratics.json';
+import polynomialsPracticeEn from './practice/9-polynomials.json';
+import quadraticsPracticeEn from './practice/9-quadratics.json';
+
+// Import Lithuanian content
+import polynomialsLessonLt from './lessons/9-polynomials-lt.json';
+import quadraticsLessonLt from './lessons/9-quadratics-lt.json';
+import polynomialsExercisesLt from './exercises/9-polynomials-lt.json';
+import quadraticsExercisesLt from './exercises/9-quadratics-lt.json';
+import polynomialsPracticeLt from './practice/9-polynomials-lt.json';
+import quadraticsPracticeLt from './practice/9-quadratics-lt.json';
 
 export interface QuizQuestion {
   question: string;
@@ -52,24 +62,56 @@ export interface PracticeSet {
   problems: Problem[];
 }
 
-// Lessons data
-const lessons: Record<string, Lesson> = {
-  "9-polynomials": polynomialsLesson as Lesson,
-  "9-quadratics": quadraticsLesson as Lesson,
+// Lessons data (includes both EN and LT)
+export const lessons: Record<string, Lesson> = {
+  "9-polynomials": polynomialsLessonEn as Lesson,
+  "9-quadratics": quadraticsLessonEn as Lesson,
+  "9-polynomials-lt": polynomialsLessonLt as Lesson,
+  "9-quadratics-lt": quadraticsLessonLt as Lesson,
 };
 
-// Exercises data
-const exercises: Record<string, ExerciseSet> = {
-  "9-polynomials": polynomialsExercises as ExerciseSet,
-  "9-quadratics": quadraticsExercises as ExerciseSet,
+// Exercises data (includes both EN and LT)
+export const exercises: Record<string, ExerciseSet> = {
+  "9-polynomials": polynomialsExercisesEn as ExerciseSet,
+  "9-quadratics": quadraticsExercisesEn as ExerciseSet,
+  "9-polynomials-lt": polynomialsExercisesLt as ExerciseSet,
+  "9-quadratics-lt": quadraticsExercisesLt as ExerciseSet,
 };
 
-// Practice data
-const practice: Record<string, PracticeSet> = {
-  "9-polynomials": polynomialsPractice as PracticeSet,
-  "9-quadratics": quadraticsPractice as PracticeSet,
+// Practice data (includes both EN and LT)
+export const practice: Record<string, PracticeSet> = {
+  "9-polynomials": polynomialsPracticeEn as PracticeSet,
+  "9-quadratics": quadraticsPracticeEn as PracticeSet,
+  "9-polynomials-lt": polynomialsPracticeLt as PracticeSet,
+  "9-quadratics-lt": quadraticsPracticeLt as PracticeSet,
 };
 
+// Language-aware data loading functions
+export const getLessonByLanguage = (topicId: string, language: 'en' | 'lt'): Lesson | undefined => {
+  if (language === 'lt') {
+    const ltKey = `${topicId}-lt`;
+    return lessons[ltKey] || lessons[topicId];
+  }
+  return lessons[topicId];
+};
+
+export const getExercisesByLanguage = (topicId: string, language: 'en' | 'lt'): ExerciseSet | undefined => {
+  if (language === 'lt') {
+    const ltKey = `${topicId}-lt`;
+    return exercises[ltKey] || exercises[topicId];
+  }
+  return exercises[topicId];
+};
+
+export const getPracticeByLanguage = (topicId: string, language: 'en' | 'lt'): PracticeSet | undefined => {
+  if (language === 'lt') {
+    const ltKey = `${topicId}-lt`;
+    return practice[ltKey] || practice[topicId];
+  }
+  return practice[topicId];
+};
+
+// Legacy functions (for backward compatibility)
 export const getLesson = (topicId: string): Lesson | undefined => {
   return lessons[topicId];
 };
@@ -82,4 +124,13 @@ export const getPractice = (topicId: string): PracticeSet | undefined => {
   return practice[topicId];
 };
 
-export { lessons, exercises, practice };
+// Custom hook for language-aware content loading
+export const useLocalizedContent = () => {
+  const { language } = useLanguage();
+  
+  return {
+    getLesson: (topicId: string) => getLessonByLanguage(topicId, language),
+    getExercises: (topicId: string) => getExercisesByLanguage(topicId, language),
+    getPractice: (topicId: string) => getPracticeByLanguage(topicId, language),
+  };
+};

@@ -17,7 +17,7 @@ import "katex/dist/katex.min.css";
 import { useLearningPlan } from "@/hooks/useLearningPlan";
 import { useTaskProgress } from "@/hooks/useTaskProgress";
 import { SessionManager } from "@/lib/sessionManager";
-import { lessons, type Lesson, type LessonStep, type QuizQuestion } from "@/data";
+import { useLocalizedContent, type Lesson, type LessonStep, type QuizQuestion } from "@/data";
 import { useTranslation } from "@/translations";
 
 
@@ -32,6 +32,7 @@ const StepByStep = () => {
   const { plan, tasks } = useLearningPlan();
   const { markQuizPassed } = useTaskProgress();
   const t = useTranslation();
+  const { getLesson } = useLocalizedContent();
 
   useEffect(() => {
     // Check if in review mode (from "Back to Theory" button)
@@ -73,8 +74,8 @@ const StepByStep = () => {
   }, [tasks, navigate, searchParams]);
 
   const topicId = plan?.topic_id || "9-quadratics";
-  const currentLesson = lessons[topicId] || lessons["9-quadratics"];
-  const totalSteps = currentLesson.steps.length;
+  const currentLesson = getLesson(topicId) || getLesson("9-quadratics");
+  const totalSteps = currentLesson?.steps.length || 0;
   const isLastStep = currentStep === totalSteps - 1;
 
   const startQuiz = () => {
