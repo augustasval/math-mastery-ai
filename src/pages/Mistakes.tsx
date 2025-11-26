@@ -310,6 +310,31 @@ const Mistakes = () => {
                   <TabsTrigger value="exercise">{t.exercise}</TabsTrigger>
                   <TabsTrigger value="practice">{t.practice}</TabsTrigger>
                 </TabsList>
+                
+                <TabsContent value="all" className="space-y-4 mt-4">
+                  {mistakes.map((mistake) => (
+                    <MistakeCard key={mistake.id} mistake={mistake} onDelete={handleDeleteMistake} />
+                  ))}
+                </TabsContent>
+                
+                <TabsContent value="quiz" className="space-y-4 mt-4">
+                  {quizMistakes.map((mistake) => (
+                    <MistakeCard key={mistake.id} mistake={mistake} onDelete={handleDeleteMistake} />
+                  ))}
+                </TabsContent>
+                
+                <TabsContent value="exercise" className="space-y-4 mt-4">
+                  {exerciseMistakes.map((mistake) => (
+                    <MistakeCard key={mistake.id} mistake={mistake} onDelete={handleDeleteMistake} />
+                  ))}
+                </TabsContent>
+                
+                <TabsContent value="practice" className="space-y-4 mt-4">
+                  {practiceMistakes.map((mistake) => (
+                    <MistakeCard key={mistake.id} mistake={mistake} onDelete={handleDeleteMistake} />
+                  ))}
+                </TabsContent>
+              </Tabs>
             )}
           </Card>
         </div>
@@ -319,6 +344,8 @@ const Mistakes = () => {
 };
 
 const MistakeCard = ({ mistake, onDelete }: { mistake: MistakeRecord; onDelete: (id: string) => void }) => {
+  const t = useTranslation();
+  
   const getBadgeVariant = (type: MistakeRecord['type']) => {
     switch (type) {
       case 'quiz': return 'destructive';
@@ -332,10 +359,10 @@ const MistakeCard = ({ mistake, onDelete }: { mistake: MistakeRecord; onDelete: 
     const mistakeDate = new Date(date);
     const diffDays = Math.floor((now.getTime() - mistakeDate.getTime()) / (1000 * 60 * 60 * 24));
     
-    if (diffDays === 0) return 'Today';
-    if (diffDays === 1) return 'Yesterday';
-    if (diffDays < 7) return `${diffDays} days ago`;
-    if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+    if (diffDays === 0) return t.todayTime;
+    if (diffDays === 1) return t.yesterday;
+    if (diffDays < 7) return t.daysAgo(diffDays);
+    if (diffDays < 30) return t.weeksAgo(Math.floor(diffDays / 7));
     return mistakeDate.toLocaleDateString();
   };
 
@@ -367,13 +394,13 @@ const MistakeCard = ({ mistake, onDelete }: { mistake: MistakeRecord; onDelete: 
         <div className="space-y-2 mt-3">
           <div className="p-2 bg-destructive/10 border border-destructive/20 rounded">
             <p className="text-sm">
-              <span className="font-medium">Your answer:</span>{' '}
+              <span className="font-medium">{t.yourAnswer}</span>{' '}
               <span className="text-destructive">{mistake.userAnswer}</span>
             </p>
           </div>
           <div className="p-2 bg-green-500/10 border border-green-500/20 rounded">
             <p className="text-sm">
-              <span className="font-medium">Correct answer:</span>{' '}
+              <span className="font-medium">{t.correctAnswer}</span>{' '}
               <span className="text-green-600 dark:text-green-500">{mistake.correctAnswer}</span>
             </p>
           </div>
@@ -382,13 +409,13 @@ const MistakeCard = ({ mistake, onDelete }: { mistake: MistakeRecord; onDelete: 
 
       {mistake.type === 'exercise' && mistake.stepDetails && mistake.stepDetails.length > 0 && (
         <div className="mt-3 space-y-2">
-          <p className="text-sm font-medium">Steps where you struggled:</p>
+          <p className="text-sm font-medium">{t.stepsWhereYouStruggled}</p>
           <div className="space-y-2">
             {mistake.stepDetails.map((detail, idx) => {
               const stepNum = mistake.incorrectSteps?.[idx] ?? idx;
               return (
                 <div key={idx} className="p-2 bg-muted rounded text-sm">
-                  <p className="font-medium text-destructive mb-1">Step {stepNum + 1}</p>
+                  <p className="font-medium text-destructive mb-1">{t.step} {stepNum + 1}</p>
                   <div className="prose prose-sm dark:prose-invert mb-1">
                     <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
                       {detail.step}
