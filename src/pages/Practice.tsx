@@ -14,9 +14,11 @@ import rehypeKatex from "rehype-katex";
 import "katex/dist/katex.min.css";
 import { practice, type Problem, type DetailedStep } from "@/data";
 import { useLearningPlan } from "@/hooks/useLearningPlan";
+import { useTranslation } from "@/translations";
 
 const Practice = () => {
   const { plan } = useLearningPlan();
+  const t = useTranslation();
   const [selectedGrade, setSelectedGrade] = useState("9");
   const [selectedTopic, setSelectedTopic] = useState(plan?.topic_id || "9-quadratics");
   const [difficulty, setDifficulty] = useState<"easy" | "medium" | "hard">("medium");
@@ -94,9 +96,9 @@ const Practice = () => {
           
           <div className="flex items-center justify-between">
             <div className="space-y-2">
-              <h1 className="text-3xl font-bold">Practice Mode</h1>
+              <h1 className="text-3xl font-bold">{t.practiceMode}</h1>
               <p className="text-muted-foreground">
-                Score: {correctCount}/{correctCount + (isCorrect === false ? 1 : 0)}
+                {t.score} {correctCount}/{correctCount + (isCorrect === false ? 1 : 0)}
               </p>
             </div>
             <DifficultySelector value={difficulty} onChange={setDifficulty} />
@@ -125,10 +127,10 @@ const Practice = () => {
               </div>
             </div>
 
-            <div className="space-y-4">
+              <div className="space-y-4">
               <div className="flex gap-2">
                 <Input
-                  placeholder="Enter your answer..."
+                  placeholder={t.enterYourAnswer}
                   value={userAnswer}
                   onChange={(e) => setUserAnswer(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && checkAnswer()}
@@ -136,7 +138,7 @@ const Practice = () => {
                   disabled={isCorrect === true}
                 />
                 <Button onClick={checkAnswer} disabled={isCorrect === true || !userAnswer}>
-                  Check Answer
+                  {t.checkAnswer}
                 </Button>
               </div>
 
@@ -149,12 +151,12 @@ const Practice = () => {
                   {isCorrect ? (
                     <>
                       <CheckCircle className="h-5 w-5" />
-                      <span className="font-semibold">Correct! Well done.</span>
+                      <span className="font-semibold">{t.correct}</span>
                     </>
                   ) : (
                     <>
                       <XCircle className="h-5 w-5" />
-                      <span className="font-semibold">Incorrect. Try again!</span>
+                      <span className="font-semibold">{t.incorrect}</span>
                     </>
                   )}
                 </div>
@@ -163,10 +165,10 @@ const Practice = () => {
               <div className="flex gap-2">
                 <Button variant="outline" onClick={() => setShowHint(!showHint)} className="flex-1">
                   <Lightbulb className="h-4 w-4 mr-2" />
-                  {showHint ? "Hide" : "Show"} Hint
+                  {showHint ? t.hide : t.show} {t.hint}
                 </Button>
                 <Button variant="outline" onClick={() => setShowSolution(!showSolution)} className="flex-1">
-                  {showSolution ? "Hide" : "Show"} Solution
+                  {showSolution ? t.hide : t.show} Solution
                 </Button>
               </div>
 
@@ -175,7 +177,7 @@ const Practice = () => {
                   <div className="flex items-start gap-2">
                     <Lightbulb className="h-5 w-5 text-primary mt-1" />
                     <div>
-                      <p className="font-semibold text-primary mb-1">Hint:</p>
+                      <p className="font-semibold text-primary mb-1">{t.hint}</p>
                       <p className="text-sm">{currentProblem.hint}</p>
                     </div>
                   </div>
@@ -184,12 +186,12 @@ const Practice = () => {
 
               {showSolution && (
                 <Card className="p-4 bg-accent/5 border-accent">
-                  <h3 className="font-semibold mb-4">Step-by-Step Solution:</h3>
+                  <h3 className="font-semibold mb-4">{t.stepByStepSolution}</h3>
                   <div className="space-y-4">
                     {currentProblem.detailedSolution.map((step, index) => (
                       <div key={index} className="border-l-2 border-primary pl-4">
                         <Badge variant="outline" className="mb-2">
-                          Step {index + 1}
+                          {t.step} {index + 1}
                         </Badge>
                         <div className="prose prose-sm dark:prose-invert mb-2">
                           <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
@@ -205,7 +207,7 @@ const Practice = () => {
 
               {isCorrect && (
                 <Button onClick={nextProblem} className="w-full" size="lg">
-                  Next Problem
+                  {t.nextProblem}
                 </Button>
               )}
             </div>

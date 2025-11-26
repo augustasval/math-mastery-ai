@@ -13,9 +13,11 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import "katex/dist/katex.min.css";
 import { mistakeStorage, MistakeRecord } from "@/lib/mistakeStorage";
+import { useTranslation } from "@/translations";
 
 const Mistakes = () => {
   const navigate = useNavigate();
+  const t = useTranslation();
   const [mistakes, setMistakes] = useState<MistakeRecord[]>([]);
   const [topicStats, setTopicStats] = useState<Record<string, number>>({});
 
@@ -89,9 +91,9 @@ const Mistakes = () => {
           <div className="flex items-center justify-between">
             <Button variant="ghost" onClick={() => navigate('/')}>
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {t.back}
             </Button>
-            <h1 className="text-4xl font-bold text-center">CorePus</h1>
+            <h1 className="text-4xl font-bold text-center">{t.appName}</h1>
             <div className="w-[88px]" />
           </div>
 
@@ -99,33 +101,33 @@ const Mistakes = () => {
             <Card>
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-sm font-medium">Total Mistakes</CardTitle>
+                  <CardTitle className="text-sm font-medium">{t.totalMistakes}</CardTitle>
                   <BarChart3 className="h-4 w-4 text-muted-foreground" />
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{mistakes.length}</div>
-                <p className="text-xs text-muted-foreground mt-1">All time</p>
+                <p className="text-xs text-muted-foreground mt-1">{t.allTime}</p>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-sm font-medium">This Week</CardTitle>
+                  <CardTitle className="text-sm font-medium">{t.thisWeek}</CardTitle>
                   <Calendar className="h-4 w-4 text-muted-foreground" />
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{thisWeekMistakes}</div>
-                <p className="text-xs text-muted-foreground mt-1">Last 7 days</p>
+                <p className="text-xs text-muted-foreground mt-1">{t.last7Days}</p>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-sm font-medium">Improvement</CardTitle>
+                  <CardTitle className="text-sm font-medium">{t.improvement}</CardTitle>
                   <TrendingDown className="h-4 w-4 text-muted-foreground" />
                 </div>
               </CardHeader>
@@ -133,27 +135,27 @@ const Mistakes = () => {
                 <div className="text-2xl font-bold">
                   {improvementRate.percentChange > 0 ? '+' : ''}{improvementRate.percentChange.toFixed(0)}%
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">vs last week</p>
+                <p className="text-xs text-muted-foreground mt-1">{t.vsLastWeek}</p>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-sm font-medium">Common Error</CardTitle>
+                  <CardTitle className="text-sm font-medium">{t.commonError}</CardTitle>
                   <AlertCircle className="h-4 w-4 text-muted-foreground" />
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold capitalize">{mostCommonErrorType}</div>
-                <p className="text-xs text-muted-foreground mt-1">Pattern detected</p>
+                <p className="text-xs text-muted-foreground mt-1">{t.patternDetected}</p>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-sm font-medium">Focus Area</CardTitle>
+                  <CardTitle className="text-sm font-medium">{t.focusArea}</CardTitle>
                   <Target className="h-4 w-4 text-muted-foreground" />
                 </div>
               </CardHeader>
@@ -161,20 +163,20 @@ const Mistakes = () => {
                 <div className="text-2xl font-bold">
                   {mostChallengingTopic ? mostChallengingTopic[0] : "None"}
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">Needs practice</p>
+                <p className="text-xs text-muted-foreground mt-1">{t.needsPractice}</p>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-sm font-medium">Streak</CardTitle>
+                  <CardTitle className="text-sm font-medium">{t.streak}</CardTitle>
                   <TrendingUp className="h-4 w-4 text-muted-foreground" />
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{daysSinceLastMistake}</div>
-                <p className="text-xs text-muted-foreground mt-1">Days mistake-free</p>
+                <p className="text-xs text-muted-foreground mt-1">{t.daysMistakeFree}</p>
               </CardContent>
             </Card>
           </div>
@@ -184,7 +186,7 @@ const Mistakes = () => {
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
                   <AlertCircle className="h-5 w-5" />
-                  Patterns Detected
+                  {t.patternsDetected}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
@@ -196,7 +198,7 @@ const Mistakes = () => {
                     <div>
                       <p className="font-medium capitalize">{pattern.keyword} Steps</p>
                       <p className="text-sm text-muted-foreground">
-                        {((pattern.count / exerciseMistakes.length) * 100).toFixed(0)}% of exercise mistakes
+                        {((pattern.count / exerciseMistakes.length) * 100).toFixed(0)}% of exercise {t.mistakes}
                       </p>
                     </div>
                   </div>
@@ -208,7 +210,7 @@ const Mistakes = () => {
           {chartData.length > 0 && (
             <Card>
               <CardHeader>
-                <CardTitle className="text-lg">Progress Over Time</CardTitle>
+                <CardTitle className="text-lg">{t.progressOverTime}</CardTitle>
               </CardHeader>
               <CardContent>
                 <ChartContainer
@@ -253,7 +255,7 @@ const Mistakes = () => {
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
                   <BarChart3 className="h-5 w-5" />
-                  Mistakes by Topic
+                  {t.mistakesByTopic}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -264,7 +266,7 @@ const Mistakes = () => {
                       <div className="flex justify-between text-sm">
                         <span className="font-medium">{topic}</span>
                         <span className="text-muted-foreground">
-                          {count} mistakes ({((count / mistakes.length) * 100).toFixed(0)}%)
+                          {count} {t.mistakes} ({((count / mistakes.length) * 100).toFixed(0)}%)
                         </span>
                       </div>
                       <Progress value={(count / mistakes.length) * 100} className="h-2" />
@@ -279,7 +281,7 @@ const Mistakes = () => {
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
                   <Lightbulb className="h-5 w-5" />
-                  Recommendations
+                  {t.recommendations}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
@@ -297,11 +299,17 @@ const Mistakes = () => {
             {mistakes.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
                 <AlertCircle className="h-12 w-12 mx-auto mb-3 opacity-50" />
-                <p>No mistakes tracked yet!</p>
-                <p className="text-sm">Keep practicing and you'll see your progress here.</p>
+                <p>{t.noMistakesYet}</p>
+                <p className="text-sm">{t.keepPracticingMessage}</p>
               </div>
             ) : (
               <Tabs defaultValue="all" className="w-full">
+                <TabsList className="grid w-full grid-cols-4">
+                  <TabsTrigger value="all">{t.all}</TabsTrigger>
+                  <TabsTrigger value="quiz">{t.quiz}</TabsTrigger>
+                  <TabsTrigger value="exercise">{t.exercise}</TabsTrigger>
+                  <TabsTrigger value="practice">{t.practice}</TabsTrigger>
+                </TabsList>
 ...
               </Tabs>
             )}
@@ -313,6 +321,7 @@ const Mistakes = () => {
 };
 
 const MistakeCard = ({ mistake, onDelete }: { mistake: MistakeRecord; onDelete: (id: string) => void }) => {
+  const t = useTranslation();
   const getBadgeVariant = (type: MistakeRecord['type']) => {
     switch (type) {
       case 'quiz': return 'destructive';
@@ -326,10 +335,10 @@ const MistakeCard = ({ mistake, onDelete }: { mistake: MistakeRecord; onDelete: 
     const mistakeDate = new Date(date);
     const diffDays = Math.floor((now.getTime() - mistakeDate.getTime()) / (1000 * 60 * 60 * 24));
     
-    if (diffDays === 0) return 'Today';
-    if (diffDays === 1) return 'Yesterday';
-    if (diffDays < 7) return `${diffDays} days ago`;
-    if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+    if (diffDays === 0) return t.todayTime;
+    if (diffDays === 1) return t.yesterday;
+    if (diffDays < 7) return t.daysAgo(diffDays);
+    if (diffDays < 30) return t.weeksAgo(Math.floor(diffDays / 7));
     return mistakeDate.toLocaleDateString();
   };
 
@@ -361,13 +370,13 @@ const MistakeCard = ({ mistake, onDelete }: { mistake: MistakeRecord; onDelete: 
         <div className="space-y-2 mt-3">
           <div className="p-2 bg-destructive/10 border border-destructive/20 rounded">
             <p className="text-sm">
-              <span className="font-medium">Your answer:</span>{' '}
+              <span className="font-medium">{t.yourAnswer}</span>{' '}
               <span className="text-destructive">{mistake.userAnswer}</span>
             </p>
           </div>
           <div className="p-2 bg-green-500/10 border border-green-500/20 rounded">
             <p className="text-sm">
-              <span className="font-medium">Correct answer:</span>{' '}
+              <span className="font-medium">{t.correctAnswer}</span>{' '}
               <span className="text-green-600 dark:text-green-500">{mistake.correctAnswer}</span>
             </p>
           </div>
@@ -376,7 +385,7 @@ const MistakeCard = ({ mistake, onDelete }: { mistake: MistakeRecord; onDelete: 
 
       {mistake.type === 'exercise' && mistake.stepDetails && mistake.stepDetails.length > 0 && (
         <div className="mt-3 space-y-2">
-          <p className="text-sm font-medium">Steps where you struggled:</p>
+          <p className="text-sm font-medium">{t.stepsWhereYouStruggled}</p>
           <div className="space-y-2">
             {mistake.stepDetails.map((detail, idx) => {
               const stepNum = mistake.incorrectSteps?.[idx] ?? idx;
@@ -398,8 +407,7 @@ const MistakeCard = ({ mistake, onDelete }: { mistake: MistakeRecord; onDelete: 
 
       {mistake.type === 'practice' && mistake.attempts && (
         <div className="mt-3 flex items-center gap-2">
-          <Badge variant="outline">{mistake.attempts} attempts</Badge>
-          <span className="text-xs text-muted-foreground">before solving correctly</span>
+          <Badge variant="outline">{mistake.attempts} {t.attemptsBefore}</Badge>
         </div>
       )}
     </Card>

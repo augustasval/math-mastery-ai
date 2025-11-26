@@ -1,0 +1,67 @@
+{
+  "topicId": "9-polynomials-lt",
+  "title": "Polinomai",
+  "introduction": "Polinomas yra reiškinys su kintamaisiais ir koeficientais. Išmokime polinomų operacijas žingsnis po žingsnio.",
+  "steps": [
+    {
+      "title": "Polinomų supratimas",
+      "explanation": "Polinomas yra reiškinys, sudarytas iš kintamųjų ir koeficientų, sujungtų sudėtimi, atimtimi ir dauginimu. Kintamasis gali turėti sveikųjų skaičių rodiklius kaip $x^2$ ar $x^3$, bet niekada neigiamus ar trupmenius. Kiekviena polinomo dalis vadinama nariu. Pavyzdžiui, $3x^2 + 2x - 5$ turi tris narius: $3x^2$, $2x$ ir $-5$. Polinomo laipsnis yra didžiausias kintamojo rodiklis.",
+      "example": "$5x^3 - 2x^2 + x - 8$ yra trečio laipsnio polinomas, nes didžiausias $x$ laipsnis yra 3. Narys $5x^3$ vadinamas pirmuoju nariu, o 5 yra pirmasis koeficientas.",
+      "tip": "Laipsnis nurodo didžiausią laipsnį - jis nustato polinomo elgseną!",
+      "quizQuestion": {
+        "question": "Koks yra polinomo $4x^5 - 3x^2 + 7$ laipsnis?",
+        "options": ["2", "3", "4", "5"],
+        "correctAnswer": 3,
+        "explanation": "Laipsnis yra didžiausias kintamojo rodiklis. Čia $x^5$ turi didžiausią rodiklį, kuris yra 5."
+      }
+    },
+    {
+      "title": "Narių ir koeficientų nustatymas",
+      "explanation": "Kiekvienas polinomas susideda iš narių. Narys susideda iš koeficiento (skaičiaus) ir kintamosios dalies (pvz., $x^2$). Narius skiria sudėties ar atimties ženklai. Koeficientas yra skaičius, padaugintas iš kintamojo. Pavyzdžiui, $-7x^3$ koeficientas yra $-7$. Narys be kintamojo, pavyzdžiui, $8$, vadinamas laisvuoju nariu.",
+      "example": "$6x^4 - 2x^3 + 5x - 9$: Nariai yra $6x^4$, $-2x^3$, $5x$ ir $-9$. Pirmasis koeficientas yra 6. Laisvasis narys yra $-9$.",
+      "tip": "Neužmirškite ženklo prieš kiekvieną narį - jis yra koeficiento dalis!",
+      "quizQuestion": {
+        "question": "Polinome $-3x^3 + 8x^2 - x + 12$, koks yra pirmasis koeficientas?",
+        "options": ["8", "-3", "12", "3"],
+        "correctAnswer": 1,
+        "explanation": "Pirmasis koeficientas yra nario su didžiausiu laipsniu koeficientas. Narys $-3x^3$ turi didžiausią laipsnį (3), todėl pirmasis koeficientas yra $-3$."
+      }
+    },
+    {
+      "title": "Polinomų sudėtis ir atimtis",
+      "explanation": "Sudedant ar atimant polinomus, sujungiame panašius narius. Panašūs nariai turi tą patį kintamąjį su tuo pačiu laipsniu. Pavyzdžiui, $3x^2$ ir $-5x^2$ yra panašūs nariai, bet $3x^2$ ir $3x$ nėra.",
+      "example": "$(4x^2 + 3x - 2) + (2x^2 - x + 5) = (4x^2 + 2x^2) + (3x - x) + (-2 + 5) = 6x^2 + 2x + 3$",
+      "tip": "Išdėstykite panašius narius vertikaliai, kad būtų lengviau juos sujungti!",
+      "quizQuestion": {
+        "question": "Kas yra $(5x^2 + 2x) - (3x^2 - 4x)$?",
+        "options": ["$2x^2 + 6x$", "$2x^2 - 2x$", "$8x^2 + 6x$", "$8x^2 - 2x$"],
+        "correctAnswer": 0,
+        "explanation": "Pirmiausia paskirstykite minusą: $(5x^2 + 2x) + (-3x^2 + 4x)$. Tada sujunkite panašius narius: $(5x^2 - 3x^2) + (2x + 4x) = 2x^2 + 6x$."
+      }
+    },
+    {
+      "title": "Polinomų daugyba",
+      "explanation": "Daugindami polinomus, naudojame paskirstomąjį dėsnį. Kiekvienas pirmojo polinomo narys turi būti padaugintas iš kiekvieno antrojo polinomo nario. Dauginant narius, dauginame koeficientus ir sudedame panašių kintamųjų rodiklius.",
+      "example": "$(x + 3)(2x - 1)$: Pirmas: $x \\cdot 2x = 2x^2$. Išorinis: $x \\cdot (-1) = -x$. Vidinis: $3 \\cdot 2x = 6x$. Paskutinis: $3 \\cdot (-1) = -3$. Sujungta: $2x^2 - x + 6x - 3 = 2x^2 + 5x - 3$",
+      "tip": "Neužmirškite sujungti panašių narių po daugybos!",
+      "quizQuestion": {
+        "question": "Kas yra $(x + 2)(x + 4)$?",
+        "options": ["$x^2 + 6x + 8$", "$x^2 + 8x + 6$", "$x^2 + 4x + 8$", "$x^2 + 2x + 8$"],
+        "correctAnswer": 0,
+        "explanation": "Naudojant FOIL: Pirmas ($x \\cdot x = x^2$), Išorinis ($x \\cdot 4 = 4x$), Vidinis ($2 \\cdot x = 2x$), Paskutinis ($2 \\cdot 4 = 8$). Sujungta: $x^2 + 4x + 2x + 8 = x^2 + 6x + 8$."
+      }
+    },
+    {
+      "title": "Specialūs polinomų sandaugos",
+      "explanation": "Tam tikros polinomų sandaugos seka nuspėjamus šablonus, kuriuos naudinga įsiminti. Binomo kvadratas: $(a + b)^2 = a^2 + 2ab + b^2$ ir $(a - b)^2 = a^2 - 2ab + b^2$. Kvadratų skirtumas: $(a + b)(a - b) = a^2 - b^2$.",
+      "example": "$(x + 5)^2 = x^2 + 2(x)(5) + 5^2 = x^2 + 10x + 25$. Taip pat, $(x + 3)(x - 3) = x^2 - 9$ naudojant kvadratų skirtumą.",
+      "tip": "Atpažinę šiuos šablonus, vėliau bus lengviau išskaidyti!",
+      "quizQuestion": {
+        "question": "Naudodami specialius sandaugos, kas yra $(x - 4)^2$?",
+        "options": ["$x^2 - 16$", "$x^2 - 8x + 16$", "$x^2 + 8x + 16$", "$x^2 - 4x + 16$"],
+        "correctAnswer": 1,
+        "explanation": "Naudojant šabloną $(a - b)^2 = a^2 - 2ab + b^2$: $(x - 4)^2 = x^2 - 2(x)(4) + 4^2 = x^2 - 8x + 16$."
+      }
+    }
+  ]
+}

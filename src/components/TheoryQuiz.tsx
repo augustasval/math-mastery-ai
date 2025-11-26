@@ -11,6 +11,7 @@ import rehypeKatex from "rehype-katex";
 import "katex/dist/katex.min.css";
 import { mistakeStorage } from "@/lib/mistakeStorage";
 import { useLearningPlan } from "@/hooks/useLearningPlan";
+import { useTranslation } from "@/translations";
 
 interface QuizQuestion {
   question: string;
@@ -29,6 +30,7 @@ interface TheoryQuizProps {
 export const TheoryQuiz = ({ questions, onComplete, onReadTheory, onRetry }: TheoryQuizProps) => {
   const navigate = useNavigate();
   const { tasks } = useLearningPlan();
+  const t = useTranslation();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [userAnswers, setUserAnswers] = useState<(number | null)[]>(Array(questions.length).fill(null));
@@ -96,7 +98,7 @@ export const TheoryQuiz = ({ questions, onComplete, onReadTheory, onRetry }: The
       <Card className="w-full">
         <CardHeader>
           <CardTitle className="flex items-center gap-3">
-            Quiz Results
+            {t.quizResults}
             <span className="text-base text-muted-foreground font-normal">
               {score}/{questions.length}
             </span>
@@ -110,14 +112,14 @@ export const TheoryQuiz = ({ questions, onComplete, onReadTheory, onRetry }: The
               size="sm"
               className="rounded-full hover:scale-105 transition-transform"
             >
-              Read Theory Again
+              {t.readTheoryAgain}
             </Button>
             <Button 
               onClick={onRetry}
               size="sm"
               className="rounded-full hover:scale-105 transition-transform"
             >
-              Retry Quiz
+              {t.retryQuiz}
             </Button>
             {showPracticeButton && (
               <Button 
@@ -125,7 +127,7 @@ export const TheoryQuiz = ({ questions, onComplete, onReadTheory, onRetry }: The
                 size="sm"
                 className="rounded-full hover:scale-105 transition-transform bg-primary"
               >
-                Start Exercise
+                {t.startExercise}
               </Button>
             )}
           </div>
@@ -145,7 +147,7 @@ export const TheoryQuiz = ({ questions, onComplete, onReadTheory, onRetry }: The
                         <XCircle className="h-5 w-5 text-destructive mt-1 flex-shrink-0" />
                       )}
                       <div className="flex-1">
-                        <p className="font-medium mb-2">Question {index + 1}:</p>
+                        <p className="font-medium mb-2">{t.question} {index + 1}:</p>
                         <div className="prose prose-sm dark:prose-invert mb-3">
                           <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
                             {q.question}
@@ -156,19 +158,19 @@ export const TheoryQuiz = ({ questions, onComplete, onReadTheory, onRetry }: The
 
                     <div className="ml-7 space-y-2">
                       <div className="text-sm">
-                        <span className="font-medium">Your answer: </span>
+                        <span className="font-medium">{t.yourAnswer} </span>
                         <span className={!isCorrect ? 'text-destructive' : ''}>
-                          {userAnswer !== null ? q.options[userAnswer] : 'Not answered'}
+                          {userAnswer !== null ? q.options[userAnswer] : t.notAnswered}
                         </span>
                       </div>
                       {!isCorrect && (
                         <div className="text-sm">
-                          <span className="font-medium text-green-600">Correct answer: </span>
+                          <span className="font-medium text-green-600">{t.correctAnswer} </span>
                           <span>{q.options[q.correctAnswer]}</span>
                         </div>
                       )}
                       <div className="p-3 bg-muted rounded-lg text-sm">
-                        <p className="font-medium mb-1">Explanation:</p>
+                        <p className="font-medium mb-1">{t.explanation}</p>
                         <div className="prose prose-sm dark:prose-invert">
                           <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
                             {q.explanation}
@@ -192,9 +194,9 @@ export const TheoryQuiz = ({ questions, onComplete, onReadTheory, onRetry }: The
     <Card className="w-full">
       <CardHeader>
         <CardTitle className="flex justify-between items-center">
-          <span>Theory Quiz</span>
+          <span>{t.theoryQuiz}</span>
           <span className="text-sm text-muted-foreground">
-            Question {currentQuestion + 1} of {questions.length}
+            {t.question} {currentQuestion + 1} {t.of} {questions.length}
           </span>
         </CardTitle>
       </CardHeader>
@@ -230,13 +232,13 @@ export const TheoryQuiz = ({ questions, onComplete, onReadTheory, onRetry }: The
             onClick={handlePreviousQuestion}
             disabled={currentQuestion === 0}
           >
-            Previous
+            {t.previous}
           </Button>
           <Button
             onClick={handleNextQuestion}
             disabled={selectedAnswer === null}
           >
-            {currentQuestion < questions.length - 1 ? "Next Question" : "Submit Quiz"}
+            {currentQuestion < questions.length - 1 ? t.nextQuestion : t.submitQuiz}
           </Button>
         </div>
       </CardContent>
