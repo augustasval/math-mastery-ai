@@ -26,13 +26,13 @@ serve(async (req) => {
       throw new Error(`Invalid JSON in request body: ${errorMsg}`);
     }
     
-    const { grade, topicId, topicName, testDate, sessionId } = requestData;
+    const { grade, topicId, topicName, testDate, sessionId, language = 'en' } = requestData;
     
     if (!grade || !topicId || !topicName || !testDate || !sessionId) {
       throw new Error('Missing required fields: grade, topicId, topicName, testDate, sessionId');
     }
     
-    console.log('Generating learning plan for:', { grade, topicId, topicName, testDate, sessionId });
+    console.log('Generating learning plan for:', { grade, topicId, topicName, testDate, sessionId, language });
 
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
     if (!LOVABLE_API_KEY) {
@@ -50,8 +50,22 @@ serve(async (req) => {
       throw new Error('Test date must be in the future');
     }
 
-    // AI prompt to generate learning plan
-    const systemPrompt = `You are an expert math educator creating personalized study plans. Generate a day-by-day learning plan that:
+    // AI prompt to generate learning plan (language-aware)
+    const isLithuanian = language === 'lt';
+    
+    const systemPrompt = isLithuanian
+      ? `Jūs esate matematikos ekspertas, kuris kuria asmeninius studijų planus. Sukurkite dieninį mokymosi planą, kuris:
+- Suskaidytų temą į loginius žingsnius
+- Seka šia tvarka: teorija → testas → praktika (lengva) → praktika (sunku) → apžvalga
+- Tinkamai paskirstytų mokymąsi atsižvelgiant į turimas dienas
+- Apimtų poilsio/apžvalgos dienas prieš egzaminą
+- Pritaikytų pagal mokinių klasę
+
+Kiekvienas uždavinys turėtų turėti:
+- Aiškų, įgyvendinamą pavadinimą
+- Trumpą aprašymą, ką reikia mokytis/praktikuoti
+- Užduoties tipą: 'theory', 'quiz', 'practice' arba 'review'`
+      : `You are an expert math educator creating personalized study plans. Generate a day-by-day learning plan that:
 - Breaks down the topic into logical steps
 - Follows the progression: theory → quiz → practice (easy) → practice (hard) → review
 - Spaces out learning appropriately given available days
@@ -63,7 +77,14 @@ Each task should have:
 - A brief description of what to study/practice
 - A task type: 'theory', 'quiz', 'practice', or 'review'`;
 
-    const userPrompt = `Create a ${daysUntilTest}-day study plan for:
+    const userPrompt = isLithuanian
+      ? `Sukurkite ${daysUntilTest} dienų mokymosi planą:
+- Klasė: ${grade}
+- Tema: ${topicName}
+- Testo data: ${testDate}
+
+Sukurkite užduotis kiekvienai dienai iki testo. Padarykite jas įtraukiančias ir įgyvendinamas. SVARBU: Visos užduočių pavadinimai ir aprašymai turi būti lietuvių kalba.`
+      : `Create a ${daysUntilTest}-day study plan for:
 - Grade: ${grade}
 - Topic: ${topicName}
 - Test Date: ${testDate}

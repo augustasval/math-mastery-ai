@@ -9,7 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { getOrCreateSessionId } from "@/lib/session";
 import { SessionManager } from "@/lib/sessionManager";
-import { useTranslation } from "@/translations";
+import { useTranslation, useLanguage } from "@/translations";
 
 interface OnboardingModalProps {
   open: boolean;
@@ -30,6 +30,7 @@ export const OnboardingModal = ({ open, onComplete, existingPlan, onClose }: Onb
   const [isGenerating, setIsGenerating] = useState(false);
   const { toast } = useToast();
   const t = useTranslation();
+  const { language } = useLanguage();
 
   const generateLocalPlan = async (sessionId: string, topic: any, daysUntilTest: number) => {
     // Create local fallback plan when Edge Function is not available
@@ -105,11 +106,19 @@ export const OnboardingModal = ({ open, onComplete, existingPlan, onClose }: Onb
     const getTopicBasedTasks = (topicName: string, daysAvailable: number) => {
       const topicTasks = [];
       
-      // Define subtopics based on the main topic
+      // Define subtopics based on the main topic (language-aware)
       let subtopics: string[] = [];
+      const isLithuanian = language === 'lt';
       
-      if (topicName.toLowerCase().includes('quadratic')) {
-        subtopics = [
+      if (topicName.toLowerCase().includes('quadratic') || topicName.toLowerCase().includes('kvadrat')) {
+        subtopics = isLithuanian ? [
+          'Kvadratinių lygčių pagrindai',
+          'Kvadratų skaidymas',
+          'Kvadratinė formulė',
+          'Parabolių braižymas',
+          'Žodinės užduotys su kvadratais',
+          'Išplėstiniai taikymai'
+        ] : [
           'Quadratic Equations Basics',
           'Factoring Quadratics',
           'Quadratic Formula',
@@ -117,8 +126,15 @@ export const OnboardingModal = ({ open, onComplete, existingPlan, onClose }: Onb
           'Word Problems with Quadratics',
           'Advanced Applications'
         ];
-      } else if (topicName.toLowerCase().includes('polynomial')) {
-        subtopics = [
+      } else if (topicName.toLowerCase().includes('polynomial') || topicName.toLowerCase().includes('polinom')) {
+        subtopics = isLithuanian ? [
+          'Polinomų pagrindai',
+          'Polinomų sudėtis ir atimtis',
+          'Polinomų daugyba',
+          'Polinomų skaidymas',
+          'Polinomų dalyba',
+          'Išplėstinės polinomų užduotys'
+        ] : [
           'Polynomial Basics',
           'Adding and Subtracting Polynomials',
           'Multiplying Polynomials',
@@ -126,16 +142,29 @@ export const OnboardingModal = ({ open, onComplete, existingPlan, onClose }: Onb
           'Polynomial Division',
           'Advanced Polynomial Problems'
         ];
-      } else if (topicName.toLowerCase().includes('pythagorean')) {
-        subtopics = [
+      } else if (topicName.toLowerCase().includes('pythagorean') || topicName.toLowerCase().includes('pitagor')) {
+        subtopics = isLithuanian ? [
+          'Pitagoro teoremos pagrindai',
+          'Trūkstamų kraštinių radimas',
+          'Pitagoro trigubai',
+          'Žodinės užduotys',
+          'Atstumo formulė'
+        ] : [
           'Pythagorean Theorem Basics',
           'Finding Missing Sides',
           'Pythagorean Triples',
           'Word Problems',
           'Distance Formula'
         ];
-      } else if (topicName.toLowerCase().includes('trigonometry') || topicName.toLowerCase().includes('trig')) {
-        subtopics = [
+      } else if (topicName.toLowerCase().includes('trigonometry') || topicName.toLowerCase().includes('trig') || topicName.toLowerCase().includes('trigono')) {
+        subtopics = isLithuanian ? [
+          'Pagrindiniai trigonometriniai santykiai',
+          'Sinusas, kosinusas ir tangentas',
+          'Specialieji kampai',
+          'Stačiakampių trikampių sprendimas',
+          'Trigonometrijos taikymai',
+          'Išplėstinė trigonometrija'
+        ] : [
           'Basic Trigonometric Ratios',
           'Sine, Cosine, and Tangent',
           'Special Angles',
@@ -143,8 +172,14 @@ export const OnboardingModal = ({ open, onComplete, existingPlan, onClose }: Onb
           'Trigonometric Applications',
           'Advanced Trigonometry'
         ];
-      } else if (topicName.toLowerCase().includes('function')) {
-        subtopics = [
+      } else if (topicName.toLowerCase().includes('function') || topicName.toLowerCase().includes('funkcij')) {
+        subtopics = isLithuanian ? [
+          'Funkcijų supratimas',
+          'Funkcijų žymėjimas',
+          'Tiesinės funkcijos',
+          'Funkcijų transformacijos',
+          'Sudėtinės funkcijos'
+        ] : [
           'Understanding Functions',
           'Function Notation',
           'Linear Functions',
@@ -153,7 +188,13 @@ export const OnboardingModal = ({ open, onComplete, existingPlan, onClose }: Onb
         ];
       } else {
         // Generic subtopics for any topic
-        subtopics = [
+        subtopics = isLithuanian ? [
+          `${topicName} pagrindai`,
+          `${topicName} uždavinių sprendimas`,
+          `${topicName} taikymai`,
+          `Išplėstinis ${topicName}`,
+          `${topicName} apžvalga`
+        ] : [
           `${topicName} Fundamentals`,
           `${topicName} Problem Solving`,
           `${topicName} Applications`,
@@ -181,7 +222,7 @@ export const OnboardingModal = ({ open, onComplete, existingPlan, onClose }: Onb
         day_number: index + 1,
         scheduled_date: format(taskDate, 'yyyy-MM-dd'),
         title: subtopic,
-        description: `Complete theory, practice problems, and quiz on ${subtopic}. Start with understanding the concepts, then practice with examples, and test your knowledge.`,
+        description: t.taskDescription(subtopic),
         task_type: 'practice' // Using 'practice' as it encompasses theory + practice + quiz
       });
     });
@@ -194,8 +235,8 @@ export const OnboardingModal = ({ open, onComplete, existingPlan, onClose }: Onb
         plan_id: plan.id,
         day_number: daysUntilTest,
         scheduled_date: format(reviewDate, 'yyyy-MM-dd'),
-        title: `${topic.name} - Final Review`,
-        description: `Comprehensive review of all ${topic.name} concepts. Review notes, practice mixed problems, and prepare for your test.`,
+        title: language === 'lt' ? `${topic.name} - Baigiamoji apžvalga` : `${topic.name} - Final Review`,
+        description: t.finalReviewDescription(topic.name),
         task_type: 'review'
       });
     }
@@ -252,8 +293,8 @@ export const OnboardingModal = ({ open, onComplete, existingPlan, onClose }: Onb
     // Enhanced validation
     if (!selectedGrade || !selectedTopicId || !testDate) {
       toast({
-        title: "Missing information",
-        description: "Please complete all steps before generating your plan.",
+        title: t.missingInformation,
+        description: t.completeAllSteps,
         variant: "destructive",
       });
       return;
@@ -266,8 +307,8 @@ export const OnboardingModal = ({ open, onComplete, existingPlan, onClose }: Onb
     
     if (testDateOnly <= today) {
       toast({
-        title: "Invalid test date",
-        description: "Please select a future date for your test.",
+        title: t.invalidTestDate,
+        description: t.selectFutureDate,
         variant: "destructive",
       });
       return;
@@ -337,8 +378,8 @@ export const OnboardingModal = ({ open, onComplete, existingPlan, onClose }: Onb
       
       if (daysUntilTest < 1) {
         toast({
-          title: "Invalid study period",
-          description: "Please select a test date that's at least 1 day in the future.",
+          title: t.invalidStudyPeriod,
+          description: t.selectAtLeast1Day,
           variant: "destructive",
         });
         return;
@@ -363,7 +404,8 @@ export const OnboardingModal = ({ open, onComplete, existingPlan, onClose }: Onb
             topicId: topic.id,
             topicName: topic.name,
             testDate: format(testDate, 'yyyy-MM-dd'),
-            sessionId
+            sessionId,
+            language
           },
           headers: {
             'Content-Type': 'application/json'
